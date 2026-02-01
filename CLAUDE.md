@@ -82,7 +82,7 @@ Supabase Postgres with RLS. Schema in `api/migrations/`:
 
 - **Top bar:** Branding, breadcrumb location label (e.g. "Novi Sad / Liman"), topic count, settings gear, auth
 - **Settings modal:** Cascading Country → City → Neighborhood selection, topic chips, theme picker, participation toggle
-- **Left column (~60%):** Community links feed (hot/new sort, voting, submit form)
+- **Left column (~60%):** Community links feed (Hot/Top/New sort, voting with upvote/unvote arrows, submit form). Top sort has Week/Year/All time range picker.
 - **Right column (~40%):** Participation opportunities panel (live/upcoming/completed)
 - **Welcome state:** When no location configured, shows prompt to open settings
 
