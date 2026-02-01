@@ -28,14 +28,14 @@ Requires `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` environment variables 
 
 - **Extension** — Preact + @preact/signals, Vite, custom CSS with dark mode
 - **Backend** — Supabase (Postgres + Auth + RLS + Edge Functions)
-- **Hierarchy** — Country → City → Neighborhood (mesna zajednica) → Block
+- **Hierarchy** — Country → City → Neighborhood → Block
 - **Two entry points** — New tab dashboard + browser action popup
 
 See [CLAUDE.md](./CLAUDE.md) for detailed architecture notes.
 
 ## Coverage
 
-111 countries with capital cities seeded. Major cities added for US, UK, EU, India, Japan, South Korea, Australia, New Zealand, South Africa, Brazil, Argentina, Chile, and Mexico. Neighborhoods currently seeded for Novi Sad only — more added as communities grow.
+111 countries with capital cities seeded. Major cities added for US, UK, EU, India, Japan, South Korea, Australia, New Zealand, South Africa, Brazil, Argentina, Chile, and Mexico. Neighborhoods seeded for Novi Sad and Krasnodar — more added as communities grow.
 
 ## License
 
