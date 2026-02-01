@@ -54,7 +54,7 @@ The popup does **not** share signals with the new tab page — it reads `dn_coun
 ### State management
 
 Signals-based stores in `src/store/`:
-- `neighborhoods.js` — **hierarchical location**: country → city → mesna_zajednica → block. Three persisted signals (`dn_country`, `dn_city`, `dn_neighborhood`). `filterNeighborhoodIds` does BFS to collect all descendant IDs for querying. Cascading setters reset children when parent changes. Existing-user migration walks parent chain to infer country/city from a saved neighborhood.
+- `neighborhoods.js` — **hierarchical location**: country → city → neighborhood → block. Three persisted signals (`dn_country`, `dn_city`, `dn_neighborhood`). `filterNeighborhoodIds` does BFS to collect all descendant IDs for querying. Cascading setters reset children when parent changes. Existing-user migration walks parent chain to infer country/city from a saved neighborhood.
 - `topics.js` — interest categories, multi-select filter persisted to localStorage
 - `links.js` — community links with pagination, voting, hot-ranking. Queries use `.in('neighborhood_id', ids)` for multi-neighborhood filtering.
 - `sessions.js` — participation opportunities grouped by status (active/upcoming/completed). Same `.in()` pattern.
@@ -64,7 +64,7 @@ Signals-based stores in `src/store/`:
 ### Database
 
 Supabase Postgres with RLS. Schema in `api/migrations/`:
-- `neighborhoods` — hierarchical: country → city → mesna_zajednica → block (type CHECK constraint). ~111 countries, ~340 cities seeded. Novi Sad and Krasnodar have mesna_zajednica rows; other cities can be expanded with data-only migrations.
+- `neighborhoods` — hierarchical: country → city → neighborhood → block (type CHECK constraint). ~111 countries, ~340 cities seeded. Novi Sad and Krasnodar have neighborhood rows; other cities can be expanded with data-only migrations.
 - `topics` — interest categories (10 seeded)
 - `links` + `link_topics` + `link_votes` — community-curated links with hot scoring
 - `sessions` + `session_topics` — participation opportunities (Harmonica, Polis, etc.)
@@ -85,7 +85,7 @@ Supabase Postgres with RLS. Schema in `api/migrations/`:
 - Supabase env vars `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` must be set at build time — Vite inlines them. Locally via `.env.local`, in CI via GitHub Actions secrets. Without them the extension shows a white page (`supabaseUrl is required`)
 - Anonymous users can browse; sign-in (magic link) required to submit/vote
 - Neighborhood queries use `.in()` with arrays of IDs (BFS descendants), not single `.eq()`
-- Adding neighborhoods (mesna_zajednica) for new cities is a data-only change — no code changes needed
+- Adding neighborhoods (neighborhood) for new cities is a data-only change — no code changes needed
 
 ## Related Projects
 

@@ -36,7 +36,7 @@ export function PopupForm() {
     (n) => n.type === 'city' && n.parent_id === countryId
   );
   const mzList = allNeighborhoods.filter(
-    (n) => n.type === 'mesna_zajednica' && n.parent_id === cityId
+    (n) => n.type === 'neighborhood' && n.parent_id === cityId
   );
 
   useEffect(() => {

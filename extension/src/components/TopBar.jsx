@@ -29,7 +29,7 @@ export function TopBar() {
   let neighborhoodLabel = 'Choose location';
   if (neighborhood) {
     const all = neighborhoods.value;
-    if (neighborhood.type === 'mesna_zajednica') {
+    if (neighborhood.type === 'neighborhood') {
       const city = all.find((n) => n.id === neighborhood.parent_id);
       neighborhoodLabel = city ? `${city.name} / ${neighborhood.name}` : neighborhood.name;
     } else if (neighborhood.type === 'city') {

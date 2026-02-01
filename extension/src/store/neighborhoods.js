@@ -29,7 +29,7 @@ export const citiesForCountry = computed(() =>
 
 export const neighborhoodsForCity = computed(() =>
   neighborhoods.value.filter(
-    (n) => n.type === 'mesna_zajednica' && n.parent_id === selectedCityId.value
+    (n) => n.type === 'neighborhood' && n.parent_id === selectedCityId.value
   )
 );
 
