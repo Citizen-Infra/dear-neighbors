@@ -15,6 +15,14 @@ cd extension && npm run dev     # Vite dev server
 
 After building, reload at `chrome://extensions` (Developer mode, Load unpacked → `extension/dist/`).
 
+```bash
+./scripts/package-dmg.sh             # Build + create .dmg (macOS)
+./scripts/package-zip.sh             # Build + create .zip (Windows/Linux)
+./scripts/package-dmg.sh --skip-build  # Use existing dist/
+```
+
+GitHub Actions workflow (`package.yml`) runs both on manual dispatch or `v*` tag push, attaches artifacts to GitHub Releases.
+
 Database migrations are in `api/migrations/` and applied to Supabase via the MCP tool (`mcp__supabase__apply_migration`, project `eeidclmhfkndimghdyuq`).
 
 ## Architecture
