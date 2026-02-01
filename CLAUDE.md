@@ -15,15 +15,21 @@ cd extension && npm run dev     # Vite dev server
 
 After building, reload at `chrome://extensions` (Developer mode, Load unpacked → `extension/dist/`).
 
+No linting or test framework configured — code quality is via review.
+
+### Releasing
+
+Bump version in `extension/public/manifest.json`, commit, tag `v*`, push tag. GitHub Actions (`package.yml`) builds `.dmg` (macOS) and `.zip` (Windows/Linux), attaches both to the GitHub Release.
+
 ```bash
-./scripts/package-dmg.sh             # Build + create .dmg (macOS)
-./scripts/package-zip.sh             # Build + create .zip (Windows/Linux)
+./scripts/package-dmg.sh             # Local: build + create .dmg
+./scripts/package-zip.sh             # Local: build + create .zip
 ./scripts/package-dmg.sh --skip-build  # Use existing dist/
 ```
 
-GitHub Actions workflow (`package.yml`) runs both on manual dispatch or `v*` tag push, attaches artifacts to GitHub Releases.
+### Migrations
 
-Database migrations are in `api/migrations/` and applied to Supabase via the MCP tool (`mcp__supabase__apply_migration`, project `eeidclmhfkndimghdyuq`).
+SQL migrations in `api/migrations/` applied via MCP tool (`mcp__supabase__apply_migration`, project `eeidclmhfkndimghdyuq`).
 
 ## Architecture
 
@@ -45,7 +51,7 @@ The extension has two Vite entry points (`vite.config.js` → `rollupOptions.inp
 - `src/newtab.html` → new tab dashboard (App component with full store)
 - `src/popup.html` → browser action popup (PopupForm with its own local state + direct Supabase calls)
 
-The popup does **not** share signals with the new tab page — it reads `dn_country`/`dn_city`/`dn_neighborhood` from localStorage and fetches neighborhoods independently.
+The popup is **self-contained** — it has its own auth UI, location selectors, and fetches data directly from Supabase. It does not share signals with the new tab page; it reads `dn_country`/`dn_city`/`dn_neighborhood` from localStorage. When modifying link submission logic, both `PopupForm.jsx` and `SubmitLinkForm.jsx` may need parallel changes.
 
 ### Service worker
 
@@ -70,7 +76,7 @@ Supabase Postgres with RLS. Schema in `api/migrations/`:
 - `admins` — users who can delete any link. RLS delete policy on `links` allows submitter OR admin.
 - `sessions` + `session_topics` — participation opportunities (Harmonica, Polis, etc.)
 - `user_preferences` — saved filters for signed-in users
-- Views: `links_with_votes` (with hot_score), `sessions_with_topics`
+- Views: `links_with_votes` (hot_score + `user_voted` flag via `auth.uid()`), `sessions_with_topics`
 
 ### UI layout
 
@@ -84,9 +90,11 @@ Supabase Postgres with RLS. Schema in `api/migrations/`:
 
 - `base: ''` in vite.config.js — Chrome extensions need relative paths
 - Supabase env vars `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` must be set at build time — Vite inlines them. Locally via `.env.local`, in CI via GitHub Actions secrets. Without them the extension shows a white page (`supabaseUrl is required`)
+- `host_permissions: ["<all_urls>"]` in manifest.json — required for SubmitLinkForm's cross-origin URL metadata fetch
 - Anonymous users can browse; sign-in (magic link) required to submit/vote
 - Neighborhood queries use `.in()` with arrays of IDs (BFS descendants), not single `.eq()`
-- Adding neighborhoods (neighborhood) for new cities is a data-only change — no code changes needed
+- Supabase RLS scoping: queries touching user-specific data (e.g. `link_votes`) must include `.eq('user_id', userId)` — the DB uses `auth.uid()` in RLS policies and view definitions, but client-side queries still need explicit user scoping
+- Adding neighborhoods for new cities is a data-only migration — no code changes needed
 
 ## Related Projects
 
