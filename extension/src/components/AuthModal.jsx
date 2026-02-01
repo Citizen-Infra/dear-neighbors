@@ -6,17 +6,21 @@ export function AuthModal({ onClose }) {
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
+  const [error, setError] = useState(null);
 
   async function handleSubmit(e) {
     e.preventDefault();
     if (!email.trim()) return;
 
+    setError(null);
     setSending(true);
-    const success = await signInWithMagicLink(email.trim());
+    const result = await signInWithMagicLink(email.trim());
     setSending(false);
 
-    if (success) {
+    if (result.ok) {
       setSent(true);
+    } else {
+      setError(result.error);
     }
   }
 
@@ -48,6 +52,7 @@ export function AuthModal({ onClose }) {
               required
               autofocus
             />
+            {error && <p class="auth-error">{error}</p>}
             <button type="submit" class="auth-submit" disabled={sending}>
               {sending ? 'Sending...' : 'Send magic link'}
             </button>

@@ -60,6 +60,11 @@ body {
   color: var(--color-primary);
 }
 
+.popup-spam-hint {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
 .popup-field {
   margin-bottom: var(--space-sm);
 }

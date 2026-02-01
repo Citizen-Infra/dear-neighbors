@@ -112,10 +112,13 @@ export function PopupForm() {
     e.preventDefault();
     if (!email.trim()) return;
     setSendingLink(true);
+    setError(null);
     const { error } = await supabase.auth.signInWithOtp({ email: email.trim() });
     setSendingLink(false);
     if (error) {
-      setError(error.message);
+      setError(error.status === 429
+        ? 'Too many attempts. Please wait a few minutes before trying again.'
+        : error.message);
     } else {
       setMagicLinkSent(true);
     }
@@ -179,6 +182,7 @@ export function PopupForm() {
           <div class="popup-magic-sent">
             <p>Check your email for a magic link!</p>
             <p class="popup-magic-email">{email}</p>
+            <p class="popup-spam-hint">Not seeing it? Check your spam folder.</p>
           </div>
         ) : (
           <form onSubmit={handleSignIn}>

@@ -34,9 +34,12 @@ export async function signInWithMagicLink(email) {
   });
   if (error) {
     console.error('Failed to send magic link:', error);
-    return false;
+    if (error.status === 429) {
+      return { error: 'Too many attempts. Please wait a few minutes before trying again.' };
+    }
+    return { error: 'Failed to send magic link. Please try again.' };
   }
-  return true;
+  return { ok: true };
 }
 
 export async function signOut() {
