@@ -82,7 +82,7 @@ Supabase Postgres with RLS. Schema in `api/migrations/`:
 ## Key Constraints
 
 - `base: ''` in vite.config.js — Chrome extensions need relative paths
-- Supabase env vars via `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
+- Supabase env vars `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` must be set at build time — Vite inlines them. Locally via `.env.local`, in CI via GitHub Actions secrets. Without them the extension shows a white page (`supabaseUrl is required`)
 - Anonymous users can browse; sign-in (magic link) required to submit/vote
 - Neighborhood queries use `.in()` with arrays of IDs (BFS descendants), not single `.eq()`
 - Adding neighborhoods (mesna_zajednica) for new cities is a data-only change — no code changes needed
