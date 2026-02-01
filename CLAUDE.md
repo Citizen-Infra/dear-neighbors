@@ -28,6 +28,10 @@ After building, reload at `chrome://extensions` (Developer mode, Load unpacked �
 - **@supabase/supabase-js** — API client
 - **Custom CSS** — variables in `src/styles/variables.css`, dark mode via `prefers-color-scheme`
 
+### Service worker
+
+`public/background.js` — static file (no build deps), copied as-is to `dist/`. Handles magic link auth: Chrome blocks external sites from redirecting to `chrome-extension://` URLs, so the magic link redirects to the Supabase project URL instead. The service worker watches `chrome.tabs.onUpdated`, detects the Supabase URL with auth tokens (`#access_token=`, `?code=`, `#error=`), and navigates the tab to the extension's `newtab.html` with tokens preserved. Supabase JS client auto-detects tokens from the URL hash on page load.
+
 ### State management
 
 Signals-based stores in `src/store/`:
