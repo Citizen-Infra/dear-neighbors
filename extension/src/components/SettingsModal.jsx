@@ -122,7 +122,7 @@ export function SettingsModal({ onClose }) {
 
         <section class="settings-section">
           <label class="settings-toggle-row">
-            <span class="settings-toggle-label">Harmonica Sessions</span>
+            <span class="settings-toggle-label">Participation Opportunities</span>
             <input
               type="checkbox"
               class="settings-toggle-checkbox"
@@ -130,7 +130,7 @@ export function SettingsModal({ onClose }) {
               onChange={(e) => setShowSessions(e.target.checked)}
             />
           </label>
-          <p class="settings-hint">Show the sessions panel alongside links.</p>
+          <p class="settings-hint">Show participation opportunities alongside links.</p>
         </section>
       </div>
     </div>

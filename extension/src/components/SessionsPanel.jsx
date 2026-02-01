@@ -5,7 +5,7 @@ export function SessionsPanel() {
   if (sessionsLoading.value) {
     return (
       <div class="sessions-panel">
-        <h2 class="section-title">Harmonica Sessions</h2>
+        <h2 class="section-title">Participate</h2>
         <div class="sessions-empty">Loading sessions...</div>
       </div>
     );
@@ -18,11 +18,11 @@ export function SessionsPanel() {
 
   return (
     <div class="sessions-panel">
-      <h2 class="section-title">Harmonica Sessions</h2>
+      <h2 class="section-title">Participate</h2>
 
       {!hasAny ? (
         <div class="sessions-empty">
-          No sessions found for this neighborhood and topics.
+          No participation opportunities found for this neighborhood and topics.
         </div>
       ) : (
         <>
