@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5] - 2026-02-01
+
+### Fixed
+- Share/vote buttons now open sign-in modal instead of silently doing nothing
+- Show "Too many attempts" error when Supabase email rate limit is hit (was silent failure)
+- Add "check your spam folder" hint after magic link is sent (both new tab and popup)
+
 ## [0.1.4] - 2026-02-01
 
 ### Changed
