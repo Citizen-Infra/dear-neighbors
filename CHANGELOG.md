@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.1.4] - 2026-02-01
+
+### Changed
+- Replace DMG packaging with single ZIP for all platforms (simpler install on macOS)
+- Single CI job instead of two parallel jobs (fixes release race condition)
+
+### Added
+- CHANGELOG.md
+- Dependabot for weekly npm security updates
+- CI badge in README
+
+### Fixed
+- Sync package.json version with manifest.json (was drifting)
+
 ## [0.1.3] - 2026-02-01
 
 ### Added
