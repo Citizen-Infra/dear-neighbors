@@ -30,127 +30,100 @@
   font-weight: 700;
   color: var(--color-primary);
   white-space: nowrap;
+  letter-spacing: -0.3px;
 }
 
-.topbar-center {
+/* Filter summary — tactile label feel */
+.topbar-filter-summary {
   flex: 1;
   display: flex;
   align-items: center;
-  gap: var(--space-md);
-  overflow-x: auto;
-}
-
-.neighborhood-selector {
-  position: relative;
-  flex-shrink: 0;
-}
-
-.neighborhood-button {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-sm) var(--space-md);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.neighborhood-button:hover {
-  background: var(--color-surface-hover);
-}
-
-.dropdown-arrow {
-  font-size: 10px;
-  color: var(--color-text-muted);
-}
-
-.neighborhood-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  margin-top: var(--space-xs);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-md);
-  min-width: 200px;
-  z-index: 10;
-}
-
-.neighborhood-option {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  width: 100%;
-  padding: var(--space-sm) var(--space-md);
-  text-align: left;
-}
-
-.neighborhood-option:hover {
-  background: var(--color-surface-hover);
-}
-
-.neighborhood-option.active {
-  color: var(--color-primary);
-  font-weight: 500;
-}
-
-.neighborhood-type {
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-  background: var(--color-border-light);
-  padding: 2px 6px;
-  border-radius: 3px;
-}
-
-.topic-chips {
-  display: flex;
-  gap: var(--space-xs);
-  overflow-x: auto;
-}
-
-.topic-chip {
-  padding: var(--space-xs) var(--space-md);
-  border-radius: 100px;
+  justify-content: center;
+  gap: 6px;
   font-size: 13px;
   font-weight: 500;
-  white-space: nowrap;
-  border: 1px solid var(--color-border);
   color: var(--color-text-secondary);
-  transition: all 0.15s ease;
+  padding: 6px var(--space-md);
+  border-radius: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
 }
 
-.topic-chip:hover {
-  border-color: var(--color-primary);
+.topbar-filter-summary:hover {
+  background: var(--color-primary-light);
+  border-color: var(--color-border);
   color: var(--color-primary);
 }
 
-.topic-chip.active {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: #fff;
+.topbar-filter-summary:active {
+  transform: scale(0.98);
 }
 
-.topbar-auth {
+.topbar-filter-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
   flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.topbar-filter-summary:hover .topbar-filter-dot {
+  background: var(--color-primary);
+}
+
+.topbar-actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+/* Gear icon — subtle spin on hover */
+.topbar-gear {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--color-text-muted);
+  transition: all 0.25s ease;
+}
+
+.topbar-gear:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.topbar-gear:hover svg {
+  transform: rotate(30deg);
+}
+
+.topbar-gear svg {
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .sign-in-button {
-  padding: var(--space-sm) var(--space-md);
+  padding: 6px 14px;
   background: var(--color-primary);
   color: #fff;
-  border-radius: var(--radius-sm);
+  border-radius: 100px;
   font-weight: 500;
   font-size: 13px;
-  transition: background 0.15s ease;
+  transition: all 0.2s ease;
 }
 
 .sign-in-button:hover {
   background: var(--color-primary-hover);
+  box-shadow: 0 2px 8px rgba(45, 106, 79, 0.25);
+}
+
+.sign-in-button:active {
+  transform: scale(0.97);
 }
 
 .user-menu-wrapper {
@@ -158,29 +131,41 @@
 }
 
 .user-avatar {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   background: var(--color-primary);
   color: #fff;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: box-shadow 0.2s ease;
+}
+
+.user-avatar:hover {
+  box-shadow: 0 0 0 2px var(--color-primary-light);
 }
 
 .user-dropdown {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 6px);
   right: 0;
-  margin-top: var(--space-xs);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
   min-width: 200px;
   z-index: 10;
+  animation: topbar-dropdown-in 0.15s ease;
+}
+
+@keyframes topbar-dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
 }
 
 .user-email {
@@ -195,6 +180,7 @@
   width: 100%;
   padding: var(--space-sm) var(--space-md);
   text-align: left;
+  transition: background 0.1s ease;
 }
 
 .user-dropdown-item:hover {

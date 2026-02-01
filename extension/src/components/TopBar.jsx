@@ -1,22 +1,19 @@
 import { useState, useRef, useEffect } from 'preact/hooks';
-import { neighborhoods, activeNeighborhood, setActiveNeighborhood } from '../store/neighborhoods';
-import { topics, activeTopicIds, toggleTopic, clearTopicFilters, allTopicsActive } from '../store/topics';
+import { activeNeighborhood } from '../store/neighborhoods';
+import { activeTopicIds, allTopicsActive } from '../store/topics';
 import { user, isSignedIn, signOut } from '../store/auth';
 import { AuthModal } from './AuthModal';
+import { SettingsModal } from './SettingsModal';
 import '../styles/topbar.css';
 
 export function TopBar() {
-  const [showNeighborhoodDropdown, setShowNeighborhoodDropdown] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const neighborhoodRef = useRef(null);
   const userMenuRef = useRef(null);
 
   useEffect(() => {
     const handler = (e) => {
-      if (neighborhoodRef.current && !neighborhoodRef.current.contains(e.target)) {
-        setShowNeighborhoodDropdown(false);
-      }
       if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
         setShowUserMenu(false);
       }
@@ -25,7 +22,13 @@ export function TopBar() {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  const current = activeNeighborhood.value;
+  const neighborhood = activeNeighborhood.value;
+  const topicCount = activeTopicIds.value.length;
+
+  const neighborhoodLabel = neighborhood ? neighborhood.name : 'All neighborhoods';
+  const topicLabel = allTopicsActive.value
+    ? 'all topics'
+    : `${topicCount} topic${topicCount !== 1 ? 's' : ''}`;
 
   return (
     <header class="topbar">
@@ -34,54 +37,24 @@ export function TopBar() {
           <h1 class="topbar-title">Dear Neighbors</h1>
         </div>
 
-        <div class="topbar-center">
-          <div class="neighborhood-selector" ref={neighborhoodRef}>
-            <button
-              class="neighborhood-button"
-              onClick={() => setShowNeighborhoodDropdown(!showNeighborhoodDropdown)}
-            >
-              {current ? current.name : 'Select neighborhood'}
-              <span class="dropdown-arrow">&#9662;</span>
-            </button>
-            {showNeighborhoodDropdown && (
-              <div class="neighborhood-dropdown">
-                {neighborhoods.value.map((n) => (
-                  <button
-                    key={n.id}
-                    class={`neighborhood-option ${n.id === current?.id ? 'active' : ''}`}
-                    onClick={() => {
-                      setActiveNeighborhood(n.id);
-                      setShowNeighborhoodDropdown(false);
-                    }}
-                  >
-                    <span class="neighborhood-type">{n.type === 'city' ? 'City' : 'MZ'}</span>
-                    {n.name}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+        <button class="topbar-filter-summary" onClick={() => setShowSettings(true)}>
+          {neighborhoodLabel}
+          <span class="topbar-filter-dot" />
+          {topicLabel}
+        </button>
 
-          <div class="topic-chips">
-            <button
-              class={`topic-chip ${allTopicsActive.value ? 'active' : ''}`}
-              onClick={clearTopicFilters}
-            >
-              All
-            </button>
-            {topics.value.map((t) => (
-              <button
-                key={t.id}
-                class={`topic-chip ${activeTopicIds.value.includes(t.id) ? 'active' : ''}`}
-                onClick={() => toggleTopic(t.id)}
-              >
-                {t.name}
-              </button>
-            ))}
-          </div>
-        </div>
+        <div class="topbar-actions">
+          <button
+            class="topbar-gear"
+            onClick={() => setShowSettings(true)}
+            aria-label="Settings"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+            </svg>
+          </button>
 
-        <div class="topbar-auth">
           {isSignedIn.value ? (
             <div class="user-menu-wrapper" ref={userMenuRef}>
               <button
@@ -108,6 +81,7 @@ export function TopBar() {
       </div>
 
       {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
+      {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
     </header>
   );
 }
