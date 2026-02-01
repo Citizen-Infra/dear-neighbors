@@ -1,18 +1,21 @@
 # CLAUDE.md
 
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 ## Project Overview
 
-**Dear Neighbors** — Chrome extension that replaces the new tab page with a neighborhood dashboard. Community-curated local news links + Harmonica deliberation sessions. Part of the Citizen Infrastructure ecosystem (NSRT).
+**Dear Neighbors** — Chrome extension that replaces the new tab page with a neighborhood dashboard. Community-curated local news links + participation opportunities (Harmonica sessions, Polis conversations, etc.). Part of the Citizen Infrastructure ecosystem (NSRT).
 
 ## Commands
 
 ```bash
-# Extension
 cd extension && npm run build   # Production build → dist/
 cd extension && npm run dev     # Vite dev server
 ```
 
 After building, reload at `chrome://extensions` (Developer mode, Load unpacked → `extension/dist/`).
+
+Database migrations are in `api/migrations/` and applied to Supabase via the MCP tool (`mcp__supabase__apply_migration`, project `eeidclmhfkndimghdyuq`).
 
 ## Architecture
 
@@ -26,44 +29,55 @@ After building, reload at `chrome://extensions` (Developer mode, Load unpacked �
 - **Preact + @preact/signals** — reactive UI, no prop drilling
 - **Vite** — build tool, `base: ''` for Chrome extension relative paths
 - **@supabase/supabase-js** — API client
-- **Custom CSS** — variables in `src/styles/variables.css`, dark mode via `prefers-color-scheme`
+- **Custom CSS** — variables in `src/styles/variables.css`, dark mode via `[data-theme="dark"]`
+
+### Two entry points
+
+The extension has two Vite entry points (`vite.config.js` → `rollupOptions.input`):
+- `src/newtab.html` → new tab dashboard (App component with full store)
+- `src/popup.html` → browser action popup (PopupForm with its own local state + direct Supabase calls)
+
+The popup does **not** share signals with the new tab page — it reads `dn_country`/`dn_city`/`dn_neighborhood` from localStorage and fetches neighborhoods independently.
 
 ### Service worker
 
-`public/background.js` — static file (no build deps), copied as-is to `dist/`. Handles magic link auth: Chrome blocks external sites from redirecting to `chrome-extension://` URLs, so the magic link redirects to the Supabase project URL instead. The service worker watches `chrome.tabs.onUpdated`, detects the Supabase URL with auth tokens (`#access_token=`, `?code=`, `#error=`), and navigates the tab to the extension's `newtab.html` with tokens preserved. Supabase JS client auto-detects tokens from the URL hash on page load.
+`public/background.js` — static file (no build deps), copied as-is to `dist/`. Handles magic link auth: Chrome blocks external sites from redirecting to `chrome-extension://` URLs, so the service worker watches `chrome.tabs.onUpdated`, detects the Supabase URL with auth tokens, and navigates the tab to `newtab.html` with tokens preserved.
 
 ### State management
 
 Signals-based stores in `src/store/`:
-- `neighborhoods.js` — location hierarchy, active neighborhood persisted to localStorage
-- `topics.js` — interest categories, active topic filters persisted to localStorage
-- `links.js` — community links with pagination, voting, hot-ranking
-- `sessions.js` — Harmonica sessions grouped by status (active/upcoming/completed)
+- `neighborhoods.js` — **hierarchical location**: country → city → mesna_zajednica → block. Three persisted signals (`dn_country`, `dn_city`, `dn_neighborhood`). `filterNeighborhoodIds` does BFS to collect all descendant IDs for querying. Cascading setters reset children when parent changes. Existing-user migration walks parent chain to infer country/city from a saved neighborhood.
+- `topics.js` — interest categories, multi-select filter persisted to localStorage
+- `links.js` — community links with pagination, voting, hot-ranking. Queries use `.in('neighborhood_id', ids)` for multi-neighborhood filtering.
+- `sessions.js` — participation opportunities grouped by status (active/upcoming/completed). Same `.in()` pattern.
 - `auth.js` — Supabase auth state (magic link sign-in)
+- `theme.js` — light/dark/system theme
 
 ### Database
 
 Supabase Postgres with RLS. Schema in `api/migrations/`:
-- `neighborhoods` — hierarchical (city → mesna_zajednica → block)
-- `topics` — interest categories
-- `links` + `link_topics` + `link_votes` — community-curated links
-- `sessions` + `session_topics` — cached Harmonica sessions
+- `neighborhoods` — hierarchical: country → city → mesna_zajednica → block (type CHECK constraint). ~111 countries, ~340 cities seeded. Only Novi Sad has mesna_zajednica rows.
+- `topics` — interest categories (10 seeded)
+- `links` + `link_topics` + `link_votes` — community-curated links with hot scoring
+- `sessions` + `session_topics` — participation opportunities (Harmonica, Polis, etc.)
 - `user_preferences` — saved filters for signed-in users
-- Views: `links_with_votes`, `sessions_with_topics`
+- Views: `links_with_votes` (with hot_score), `sessions_with_topics`
 
 ### UI layout
 
-Dashboard with fixed top bar + two-column grid:
-- **Top bar:** Branding, neighborhood selector, topic chips, auth
-- **Left (~60%):** Community links feed (hot/new sort, voting, submit form)
-- **Right (~40%):** Harmonica sessions panel (live/upcoming/completed groups)
+- **Top bar:** Branding, breadcrumb location label (e.g. "Novi Sad / Liman"), topic count, settings gear, auth
+- **Settings modal:** Cascading Country → City → Neighborhood selection, topic chips, theme picker, participation toggle
+- **Left column (~60%):** Community links feed (hot/new sort, voting, submit form)
+- **Right column (~40%):** Participation opportunities panel (live/upcoming/completed)
+- **Welcome state:** When no location configured, shows prompt to open settings
 
 ## Key Constraints
 
 - `base: ''` in vite.config.js — Chrome extensions need relative paths
 - Supabase env vars via `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
 - Anonymous users can browse; sign-in (magic link) required to submit/vote
-- Sessions synced from Harmonica API via service-role edge function (cron)
+- Neighborhood queries use `.in()` with arrays of IDs (BFS descendants), not single `.eq()`
+- Adding neighborhoods (mesna_zajednica) for new cities is a data-only change — no code changes needed
 
 ## Related Projects
 
