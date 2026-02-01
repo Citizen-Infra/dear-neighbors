@@ -56,9 +56,10 @@ Dear Neighbors — Installation Guide
 6. Done! Open a new tab to see your neighborhood dashboard
 
 Getting started:
+- Pin the extension in Chrome's toolbar (puzzle icon → pin Dear Neighbors)
 - Click the gear icon to pick your country, city, and neighborhood
 - Browse community links or share your own (sign-in required)
-- Toggle participation opportunities in settings
+- Click the pinned icon on any page to quickly share it with neighbors
 EOF
 
 # Remove old zip if present

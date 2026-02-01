@@ -20,7 +20,7 @@ npm install
 npm run build
 ```
 
-Load the extension at `chrome://extensions` → Developer mode → Load unpacked → select `extension/dist/`.
+Load the extension at `chrome://extensions` → Developer mode → Load unpacked → select `extension/dist/`. Then pin the extension in Chrome's toolbar (puzzle icon → pin Dear Neighbors) to access the quick share popup.
 
 Requires `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` environment variables (see `.env.example` or set in your shell).
 
