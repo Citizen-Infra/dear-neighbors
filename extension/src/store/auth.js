@@ -17,7 +17,11 @@ export async function initAuth() {
 }
 
 export async function signInWithMagicLink(email) {
-  const { error } = await supabase.auth.signInWithOtp({ email });
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: { emailRedirectTo: supabaseUrl },
+  });
   if (error) {
     console.error('Failed to send magic link:', error);
     return false;
