@@ -1,0 +1,73 @@
+:root {
+  /* Colors — warm, community-oriented palette */
+  --color-bg: #fafaf8;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f5f5f3;
+  --color-border: #e5e5e0;
+  --color-border-light: #f0f0ec;
+
+  --color-text: #1a1a1a;
+  --color-text-secondary: #6b6b6b;
+  --color-text-muted: #999999;
+
+  --color-primary: #2d6a4f;
+  --color-primary-hover: #245a42;
+  --color-primary-light: #d8f3dc;
+
+  --color-accent: #e07a3a;
+  --color-accent-hover: #c96a2e;
+  --color-accent-light: #fde8d8;
+
+  --color-session-active: #2d6a4f;
+  --color-session-upcoming: #457b9d;
+  --color-session-completed: #999999;
+
+  --color-vote: #e07a3a;
+  --color-vote-active: #c96a2e;
+
+  /* Typography */
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.1);
+
+  /* Layout */
+  --topbar-height: 64px;
+  --max-width: 1400px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #141414;
+    --color-surface: #1e1e1e;
+    --color-surface-hover: #2a2a2a;
+    --color-border: #333333;
+    --color-border-light: #282828;
+
+    --color-text: #e8e8e8;
+    --color-text-secondary: #a0a0a0;
+    --color-text-muted: #666666;
+
+    --color-primary-light: #1a3d2e;
+    --color-accent-light: #3d2a1a;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+}

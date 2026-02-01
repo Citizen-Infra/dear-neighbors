@@ -1,0 +1,72 @@
+.submit-form {
+  padding: var(--space-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.submit-form-field input,
+.submit-form-field textarea {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  color: var(--color-text);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.submit-form-field input:focus,
+.submit-form-field textarea:focus {
+  border-color: var(--color-primary);
+}
+
+.submit-form-field textarea {
+  resize: vertical;
+}
+
+.submit-form-topics {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.submit-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}
+
+.cancel-button {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.cancel-button:hover {
+  background: var(--color-surface-hover);
+}
+
+.submit-button {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.submit-button:hover {
+  background: var(--color-primary-hover);
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
