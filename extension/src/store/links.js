@@ -1,5 +1,6 @@
 import { signal } from '@preact/signals';
 import { supabase } from '../lib/supabase';
+import { user } from './auth';
 
 export const links = signal([]);
 export const linksLoading = signal(false);
@@ -82,14 +83,18 @@ export async function deleteLink(linkId) {
 }
 
 export async function toggleVote(linkId) {
+  const userId = user.value?.id;
+  if (!userId) return;
+
   const { data: existing } = await supabase
     .from('link_votes')
     .select('link_id')
     .eq('link_id', linkId)
+    .eq('user_id', userId)
     .maybeSingle();
 
   if (existing) {
-    await supabase.from('link_votes').delete().eq('link_id', linkId);
+    await supabase.from('link_votes').delete().eq('link_id', linkId).eq('user_id', userId);
   } else {
     await supabase.from('link_votes').insert({ link_id: linkId });
   }

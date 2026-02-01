@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks';
+import { useState, useEffect, useRef } from 'preact/hooks';
 import { submitLink } from '../store/links';
 import { activeNeighborhoodId } from '../store/neighborhoods';
 import { topics } from '../store/topics';
@@ -10,6 +10,43 @@ export function SubmitLinkForm({ onClose, onSubmitted }) {
   const [description, setDescription] = useState('');
   const [selectedTopics, setSelectedTopics] = useState([]);
   const [submitting, setSubmitting] = useState(false);
+  const [fetching, setFetching] = useState(false);
+  const titleTouched = useRef(false);
+  const descTouched = useRef(false);
+
+  useEffect(() => {
+    if (!url.trim()) return;
+    try { new URL(url); } catch { return; }
+
+    setFetching(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(url);
+        const html = await res.text();
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+
+        if (!titleTouched.current) {
+          const ogTitle = doc.querySelector('meta[property="og:title"]')?.content;
+          const pageTitle = doc.querySelector('title')?.textContent;
+          const found = ogTitle || pageTitle;
+          if (found) setTitle(found.trim());
+        }
+
+        if (!descTouched.current) {
+          const ogDesc = doc.querySelector('meta[property="og:description"]')?.content;
+          const metaDesc = doc.querySelector('meta[name="description"]')?.content;
+          const found = ogDesc || metaDesc;
+          if (found) setDescription(found.trim());
+        }
+      } catch {
+        // silent — CORS, offline, etc.
+      } finally {
+        setFetching(false);
+      }
+    }, 500);
+
+    return () => { clearTimeout(timer); setFetching(false); };
+  }, [url]);
 
   function toggleFormTopic(id) {
     setSelectedTopics((prev) =>
@@ -47,13 +84,14 @@ export function SubmitLinkForm({ onClose, onSubmitted }) {
           required
           autofocus
         />
+        {fetching && <span class="url-fetching-hint">Fetching page info...</span>}
       </div>
       <div class="submit-form-field">
         <input
           type="text"
           placeholder="Title"
           value={title}
-          onInput={(e) => setTitle(e.target.value)}
+          onInput={(e) => { titleTouched.current = true; setTitle(e.target.value); }}
           required
         />
       </div>
@@ -61,7 +99,7 @@ export function SubmitLinkForm({ onClose, onSubmitted }) {
         <textarea
           placeholder="Description (optional)"
           value={description}
-          onInput={(e) => setDescription(e.target.value)}
+          onInput={(e) => { descTouched.current = true; setDescription(e.target.value); }}
           rows={2}
         />
       </div>
