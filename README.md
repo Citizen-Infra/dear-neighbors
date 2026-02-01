@@ -1,0 +1,42 @@
+# Dear Neighbors
+
+Chrome extension that replaces the new tab page with a neighborhood dashboard. Community-curated local news links and participation opportunities (deliberation sessions, conversations, community meetings) scoped to your city and neighborhood.
+
+Part of the [NSRT](https://github.com/Citizen-Infra) (Novi Sad Relational Tech) citizen infrastructure ecosystem.
+
+## How it works
+
+- **Pick your location** — Country → City → Neighborhood (or "all neighborhoods")
+- **Browse community links** — Sorted by hot score or newest, filtered by topics
+- **Share links** — Submit relevant local news, events, and resources via the new tab page or browser popup
+- **Vote** — Upvote links that matter to your neighborhood
+- **Participate** — See live, upcoming, and completed participation opportunities (Harmonica sessions, Polis conversations, etc.)
+
+## Setup
+
+```bash
+cd extension
+npm install
+npm run build
+```
+
+Load the extension at `chrome://extensions` → Developer mode → Load unpacked → select `extension/dist/`.
+
+Requires `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` environment variables (see `.env.example` or set in your shell).
+
+## Architecture
+
+- **Extension** — Preact + @preact/signals, Vite, custom CSS with dark mode
+- **Backend** — Supabase (Postgres + Auth + RLS + Edge Functions)
+- **Hierarchy** — Country → City → Neighborhood (mesna zajednica) → Block
+- **Two entry points** — New tab dashboard + browser action popup
+
+See [CLAUDE.md](./CLAUDE.md) for detailed architecture notes.
+
+## Coverage
+
+111 countries with capital cities seeded. Major cities added for US, UK, EU, India, Japan, South Korea, Australia, New Zealand, South Africa, Brazil, Argentina, Chile, and Mexico. Neighborhoods currently seeded for Novi Sad only — more added as communities grow.
+
+## License
+
+Private — Citizen Infrastructure / NSRT
