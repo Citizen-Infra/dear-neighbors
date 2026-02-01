@@ -31,6 +31,10 @@
   min-width: 0;
 }
 
+.dashboard--full {
+  grid-template-columns: 1fr;
+}
+
 @media (max-width: 1024px) {
   .dashboard {
     grid-template-columns: 1fr;

@@ -3,6 +3,12 @@ import { supabase } from '../lib/supabase';
 
 export const sessions = signal([]);
 export const sessionsLoading = signal(false);
+export const showSessions = signal(localStorage.getItem('dn_show_sessions') === 'true');
+
+export function setShowSessions(val) {
+  showSessions.value = val;
+  localStorage.setItem('dn_show_sessions', String(val));
+}
 
 export const activeSessions = computed(() =>
   sessions.value.filter((s) => s.status === 'active')

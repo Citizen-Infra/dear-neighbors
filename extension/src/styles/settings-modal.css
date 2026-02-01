@@ -225,3 +225,32 @@
   margin-top: 10px;
   font-style: italic;
 }
+
+/* Toggle row */
+.settings-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px var(--space-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.settings-toggle-row:hover {
+  background: var(--color-surface-hover);
+}
+
+.settings-toggle-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.settings-toggle-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--color-primary);
+}

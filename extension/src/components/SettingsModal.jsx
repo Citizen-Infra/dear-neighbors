@@ -1,5 +1,6 @@
 import { neighborhoods, activeNeighborhood, setActiveNeighborhood } from '../store/neighborhoods';
 import { topics, activeTopicIds, toggleTopic, clearTopicFilters, allTopicsActive } from '../store/topics';
+import { showSessions, setShowSessions } from '../store/sessions';
 import '../styles/settings-modal.css';
 
 export function SettingsModal({ onClose }) {
@@ -55,6 +56,19 @@ export function SettingsModal({ onClose }) {
           {allTopicsActive.value && (
             <p class="settings-hint">All topics shown. Tap to filter.</p>
           )}
+        </section>
+
+        <section class="settings-section">
+          <label class="settings-toggle-row">
+            <span class="settings-toggle-label">Harmonica Sessions</span>
+            <input
+              type="checkbox"
+              class="settings-toggle-checkbox"
+              checked={showSessions.value}
+              onChange={(e) => setShowSessions(e.target.checked)}
+            />
+          </label>
+          <p class="settings-hint">Show the sessions panel alongside links.</p>
         </section>
       </div>
     </div>

@@ -3,7 +3,7 @@ import { initAuth } from './store/auth';
 import { loadNeighborhoods, activeNeighborhoodId } from './store/neighborhoods';
 import { loadTopics, activeTopicIds, allTopicsActive } from './store/topics';
 import { loadLinks } from './store/links';
-import { loadSessions } from './store/sessions';
+import { loadSessions, showSessions } from './store/sessions';
 import { TopBar } from './components/TopBar';
 import { LinksFeed } from './components/LinksFeed';
 import { SessionsPanel } from './components/SessionsPanel';
@@ -44,13 +44,15 @@ export function App() {
   return (
     <div class="app">
       <TopBar />
-      <main class="dashboard">
+      <main class={`dashboard${showSessions.value ? '' : ' dashboard--full'}`}>
         <section class="dashboard-links">
           <LinksFeed />
         </section>
-        <section class="dashboard-sessions">
-          <SessionsPanel />
-        </section>
+        {showSessions.value && (
+          <section class="dashboard-sessions">
+            <SessionsPanel />
+          </section>
+        )}
       </main>
     </div>
   );
