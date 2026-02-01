@@ -4,6 +4,7 @@ import { loadNeighborhoods, activeNeighborhoodId } from './store/neighborhoods';
 import { loadTopics, activeTopicIds, allTopicsActive } from './store/topics';
 import { loadLinks } from './store/links';
 import { loadSessions, showSessions } from './store/sessions';
+import { initTheme } from './store/theme';
 import { TopBar } from './components/TopBar';
 import { LinksFeed } from './components/LinksFeed';
 import { SessionsPanel } from './components/SessionsPanel';
@@ -13,6 +14,7 @@ export function App() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
+    initTheme();
     (async () => {
       await Promise.all([
         initAuth(),

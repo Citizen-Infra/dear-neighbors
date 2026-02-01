@@ -92,10 +92,8 @@
   color: var(--color-session-upcoming);
 }
 
-@media (prefers-color-scheme: dark) {
-  .session-status-badge.status-upcoming {
-    background: #1a2a3d;
-  }
+[data-theme="dark"] .session-status-badge.status-upcoming {
+  background: #1a2a3d;
 }
 
 .session-status-badge.status-completed {

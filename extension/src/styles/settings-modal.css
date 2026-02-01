@@ -226,6 +226,12 @@
   font-style: italic;
 }
 
+/* Theme picker */
+.theme-picker {
+  display: flex;
+  gap: 6px;
+}
+
 /* Toggle row */
 .settings-toggle-row {
   display: flex;

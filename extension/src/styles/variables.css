@@ -51,23 +51,21 @@
   --max-width: 1400px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #141414;
-    --color-surface: #1e1e1e;
-    --color-surface-hover: #2a2a2a;
-    --color-border: #333333;
-    --color-border-light: #282828;
+[data-theme="dark"] {
+  --color-bg: #141414;
+  --color-surface: #1e1e1e;
+  --color-surface-hover: #2a2a2a;
+  --color-border: #333333;
+  --color-border-light: #282828;
 
-    --color-text: #e8e8e8;
-    --color-text-secondary: #a0a0a0;
-    --color-text-muted: #666666;
+  --color-text: #e8e8e8;
+  --color-text-secondary: #a0a0a0;
+  --color-text-muted: #666666;
 
-    --color-primary-light: #1a3d2e;
-    --color-accent-light: #3d2a1a;
+  --color-primary-light: #1a3d2e;
+  --color-accent-light: #3d2a1a;
 
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4);
-  }
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4);
 }

@@ -1,6 +1,7 @@
 import { neighborhoods, activeNeighborhood, setActiveNeighborhood } from '../store/neighborhoods';
 import { topics, activeTopicIds, toggleTopic, clearTopicFilters, allTopicsActive } from '../store/topics';
 import { showSessions, setShowSessions } from '../store/sessions';
+import { theme, setTheme } from '../store/theme';
 import '../styles/settings-modal.css';
 
 export function SettingsModal({ onClose }) {
@@ -56,6 +57,21 @@ export function SettingsModal({ onClose }) {
           {allTopicsActive.value && (
             <p class="settings-hint">All topics shown. Tap to filter.</p>
           )}
+        </section>
+
+        <section class="settings-section">
+          <h4 class="settings-section-title">Theme</h4>
+          <div class="theme-picker">
+            {['light', 'dark', 'system'].map((val) => (
+              <button
+                key={val}
+                class={`topic-grid-chip ${theme.value === val ? 'active' : ''}`}
+                onClick={() => setTheme(val)}
+              >
+                {val.charAt(0).toUpperCase() + val.slice(1)}
+              </button>
+            ))}
+          </div>
         </section>
 
         <section class="settings-section">
