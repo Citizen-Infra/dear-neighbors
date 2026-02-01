@@ -15,7 +15,7 @@ done
 
 # Read version from extension/package.json
 VERSION=$(node -p "require('$PROJECT_DIR/extension/package.json').version")
-ZIP_NAME="Dear-Neighbors-v${VERSION}-windows.zip"
+ZIP_NAME="Dear-Neighbors-v${VERSION}.zip"
 STAGE_DIR="$PROJECT_DIR/.zip-stage"
 
 echo "==> Packaging Dear Neighbors v${VERSION} (zip)"

@@ -19,12 +19,11 @@ No linting or test framework configured — code quality is via review.
 
 ### Releasing
 
-Bump version in `extension/public/manifest.json`, commit, tag `v*`, push tag. GitHub Actions (`package.yml`) builds `.dmg` (macOS) and `.zip` (Windows/Linux), attaches both to the GitHub Release.
+Bump version in `extension/public/manifest.json`, commit, tag `v*`, push tag. GitHub Actions (`package.yml`) builds a `.zip` and attaches it to the GitHub Release.
 
 ```bash
-./scripts/package-dmg.sh             # Local: build + create .dmg
 ./scripts/package-zip.sh             # Local: build + create .zip
-./scripts/package-dmg.sh --skip-build  # Use existing dist/
+./scripts/package-zip.sh --skip-build  # Use existing dist/
 ```
 
 ### Migrations
