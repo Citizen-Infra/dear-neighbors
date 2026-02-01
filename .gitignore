@@ -6,3 +6,7 @@ dist/
 *.log
 .DS_Store
 Thumbs.db
+*.dmg
+*.zip
+.dmg-stage/
+.zip-stage/
