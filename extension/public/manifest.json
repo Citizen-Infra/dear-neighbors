@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Dear Neighbors",
   "version": "0.1.0",
-  "description": "A neighborhood dashboard with community-curated news and Harmonica deliberation sessions.",
+  "description": "A neighborhood dashboard with community-curated news and local participation opportunities.",
   "permissions": ["tabs", "storage"],
   "background": {
     "service_worker": "background.js"
