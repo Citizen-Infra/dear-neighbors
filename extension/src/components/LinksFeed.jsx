@@ -8,47 +8,44 @@ import '../styles/links.css';
 
 export function LinksFeed() {
   const [sort, setSort] = useState('hot');
+  const [topRange, setTopRange] = useState('all');
   const [showSubmitForm, setShowSubmitForm] = useState(false);
 
-  function handleSort(newSort) {
+  function handleSort(newSort, range) {
     setSort(newSort);
+    const r = range ?? topRange;
+    if (newSort === 'top') setTopRange(r);
     loadLinks({
       neighborhoodIds: filterNeighborhoodIds.value,
       topicIds: allTopicsActive.value ? [] : activeTopicIds.value,
       sort: newSort,
+      topRange: newSort === 'top' ? r : undefined,
     });
   }
 
-  function handleLoadMore() {
-    loadLinks({
+  function reloadOpts(overrides = {}) {
+    return {
       neighborhoodIds: filterNeighborhoodIds.value,
       topicIds: allTopicsActive.value ? [] : activeTopicIds.value,
       sort,
-      page: linksPage.value + 1,
-      append: true,
-    });
+      topRange: sort === 'top' ? topRange : undefined,
+      ...overrides,
+    };
+  }
+
+  function handleLoadMore() {
+    loadLinks(reloadOpts({ page: linksPage.value + 1, append: true }));
   }
 
   async function handleVote(linkId) {
     if (!isSignedIn.value) return;
     await toggleVote(linkId);
-    // Reload to get updated counts
-    loadLinks({
-      neighborhoodIds: filterNeighborhoodIds.value,
-      topicIds: allTopicsActive.value ? [] : activeTopicIds.value,
-      sort,
-    });
+    loadLinks(reloadOpts());
   }
 
   async function handleDelete(linkId) {
     const ok = await deleteLink(linkId);
-    if (ok) {
-      loadLinks({
-        neighborhoodIds: filterNeighborhoodIds.value,
-        topicIds: allTopicsActive.value ? [] : activeTopicIds.value,
-        sort,
-      });
-    }
+    if (ok) loadLinks(reloadOpts());
   }
 
   return (
@@ -64,12 +61,31 @@ export function LinksFeed() {
               Hot
             </button>
             <button
+              class={`sort-tab ${sort === 'top' ? 'active' : ''}`}
+              onClick={() => handleSort('top')}
+            >
+              Top
+            </button>
+            <button
               class={`sort-tab ${sort === 'new' ? 'active' : ''}`}
               onClick={() => handleSort('new')}
             >
               New
             </button>
           </div>
+          {sort === 'top' && (
+            <div class="top-range-tabs">
+              {[['week', 'Week'], ['year', 'Year'], ['all', 'All']].map(([val, label]) => (
+                <button
+                  key={val}
+                  class={`top-range-tab ${topRange === val ? 'active' : ''}`}
+                  onClick={() => handleSort('top', val)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          )}
           <button
             class="submit-link-button"
             onClick={() => {
@@ -86,11 +102,7 @@ export function LinksFeed() {
       {showSubmitForm && (
         <SubmitLinkForm onClose={() => setShowSubmitForm(false)} onSubmitted={() => {
           setShowSubmitForm(false);
-          loadLinks({
-            neighborhoodIds: filterNeighborhoodIds.value,
-            topicIds: allTopicsActive.value ? [] : activeTopicIds.value,
-            sort,
-          });
+          loadLinks(reloadOpts());
         }} />
       )}
 
@@ -125,13 +137,21 @@ function LinkCard({ link, onVote, onDelete }) {
     <article class="link-card">
       <div class="link-vote">
         <button
-          class={`vote-button ${link.user_voted ? 'voted' : ''}`}
-          onClick={() => onVote(link.id)}
-          title={isSignedIn.value ? 'Upvote' : 'Sign in to vote'}
+          class={`vote-button upvote ${link.user_voted ? 'voted' : ''}`}
+          onClick={() => !link.user_voted && onVote(link.id)}
+          title={!isSignedIn.value ? 'Sign in to vote' : link.user_voted ? 'Already voted' : 'Upvote'}
+          disabled={link.user_voted}
         >
           &#9650;
         </button>
         <span class="vote-count">{link.vote_count || 0}</span>
+        <button
+          class={`vote-button downvote ${link.user_voted ? '' : 'hidden'}`}
+          onClick={() => link.user_voted && onVote(link.id)}
+          title="Remove vote"
+        >
+          &#9660;
+        </button>
       </div>
       <div class="link-content">
         <a class="link-title" href={link.url} target="_blank" rel="noopener noreferrer">

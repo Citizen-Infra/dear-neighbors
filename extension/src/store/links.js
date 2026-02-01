@@ -9,7 +9,7 @@ export const linksHasMore = signal(true);
 
 const PAGE_SIZE = 20;
 
-export async function loadLinks({ neighborhoodIds = [], topicIds = [], sort = 'hot', page = 1, append = false }) {
+export async function loadLinks({ neighborhoodIds = [], topicIds = [], sort = 'hot', topRange, page = 1, append = false }) {
   linksLoading.value = true;
 
   let query = supabase
@@ -24,8 +24,17 @@ export async function loadLinks({ neighborhoodIds = [], topicIds = [], sort = 'h
     query = query.contains('topic_ids', topicIds);
   }
 
+  if (sort === 'top' && topRange && topRange !== 'all') {
+    const since = new Date();
+    if (topRange === 'week') since.setDate(since.getDate() - 7);
+    else if (topRange === 'year') since.setFullYear(since.getFullYear() - 1);
+    query = query.gte('created_at', since.toISOString());
+  }
+
   if (sort === 'new') {
     query = query.order('created_at', { ascending: false });
+  } else if (sort === 'top') {
+    query = query.order('vote_count', { ascending: false });
   } else {
     query = query.order('hot_score', { ascending: false });
   }
