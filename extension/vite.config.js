@@ -9,6 +9,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         newtab: resolve(__dirname, 'src/newtab.html'),
+        popup: resolve(__dirname, 'src/popup.html'),
       },
     },
     outDir: 'dist',
