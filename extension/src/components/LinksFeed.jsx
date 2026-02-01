@@ -1,6 +1,6 @@
 import { useState } from 'preact/hooks';
 import { links, linksLoading, linksHasMore, linksPage, loadLinks, toggleVote } from '../store/links';
-import { activeNeighborhoodId } from '../store/neighborhoods';
+import { filterNeighborhoodIds } from '../store/neighborhoods';
 import { activeTopicIds, allTopicsActive } from '../store/topics';
 import { isSignedIn } from '../store/auth';
 import { SubmitLinkForm } from './SubmitLinkForm';
@@ -13,7 +13,7 @@ export function LinksFeed() {
   function handleSort(newSort) {
     setSort(newSort);
     loadLinks({
-      neighborhoodId: activeNeighborhoodId.value,
+      neighborhoodIds: filterNeighborhoodIds.value,
       topicIds: allTopicsActive.value ? [] : activeTopicIds.value,
       sort: newSort,
     });
@@ -21,7 +21,7 @@ export function LinksFeed() {
 
   function handleLoadMore() {
     loadLinks({
-      neighborhoodId: activeNeighborhoodId.value,
+      neighborhoodIds: filterNeighborhoodIds.value,
       topicIds: allTopicsActive.value ? [] : activeTopicIds.value,
       sort,
       page: linksPage.value + 1,
@@ -34,7 +34,7 @@ export function LinksFeed() {
     await toggleVote(linkId);
     // Reload to get updated counts
     loadLinks({
-      neighborhoodId: activeNeighborhoodId.value,
+      neighborhoodIds: filterNeighborhoodIds.value,
       topicIds: allTopicsActive.value ? [] : activeTopicIds.value,
       sort,
     });
@@ -76,7 +76,7 @@ export function LinksFeed() {
         <SubmitLinkForm onClose={() => setShowSubmitForm(false)} onSubmitted={() => {
           setShowSubmitForm(false);
           loadLinks({
-            neighborhoodId: activeNeighborhoodId.value,
+            neighborhoodIds: filterNeighborhoodIds.value,
             topicIds: allTopicsActive.value ? [] : activeTopicIds.value,
             sort,
           });

@@ -1,12 +1,14 @@
-import { neighborhoods, activeNeighborhood, setActiveNeighborhood } from '../store/neighborhoods';
+import {
+  neighborhoods, activeNeighborhoodId, selectedCountryId, selectedCityId,
+  countries, citiesForCountry, neighborhoodsForCity,
+  setSelectedCountry, setSelectedCity, setActiveNeighborhood,
+} from '../store/neighborhoods';
 import { topics, activeTopicIds, toggleTopic, clearTopicFilters, allTopicsActive } from '../store/topics';
 import { showSessions, setShowSessions } from '../store/sessions';
 import { theme, setTheme } from '../store/theme';
 import '../styles/settings-modal.css';
 
 export function SettingsModal({ onClose }) {
-  const current = activeNeighborhood.value;
-
   return (
     <div class="modal-overlay" onClick={onClose}>
       <div class="settings-modal" onClick={(e) => e.stopPropagation()}>
@@ -18,20 +20,64 @@ export function SettingsModal({ onClose }) {
         </div>
 
         <section class="settings-section">
-          <h4 class="settings-section-title">Neighborhood</h4>
-          <div class="neighborhood-list">
-            {neighborhoods.value.map((n) => (
-              <button
-                key={n.id}
-                class={`neighborhood-item ${n.id === current?.id ? 'active' : ''}`}
-                onClick={() => setActiveNeighborhood(n.id)}
-              >
-                <span class="neighborhood-type-badge">{n.type === 'city' ? 'City' : 'MZ'}</span>
-                <span class="neighborhood-name">{n.name}</span>
-                {n.id === current?.id && <span class="neighborhood-check">&#10003;</span>}
-              </button>
+          <h4 class="settings-section-title">Location</h4>
+
+          <label class="settings-label">Country</label>
+          <select
+            class="location-select"
+            value={selectedCountryId.value || ''}
+            onChange={(e) => setSelectedCountry(e.target.value)}
+          >
+            <option value="">Select country...</option>
+            {countries.value.map((c) => (
+              <option key={c.id} value={c.id}>{c.name}</option>
             ))}
-          </div>
+          </select>
+
+          {selectedCountryId.value && (
+            <>
+              <label class="settings-label">City</label>
+              <select
+                class="location-select"
+                value={selectedCityId.value || ''}
+                onChange={(e) => setSelectedCity(e.target.value)}
+              >
+                <option value="">Select city...</option>
+                {citiesForCountry.value.map((c) => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
+            </>
+          )}
+
+          {selectedCityId.value && (
+            <>
+              <label class="settings-label">Neighborhood</label>
+              <div class="neighborhood-list">
+                <button
+                  class={`neighborhood-item ${activeNeighborhoodId.value === selectedCityId.value ? 'active' : ''}`}
+                  onClick={() => setActiveNeighborhood(selectedCityId.value)}
+                >
+                  <span class="neighborhood-name">All neighborhoods</span>
+                  {activeNeighborhoodId.value === selectedCityId.value && (
+                    <span class="neighborhood-check">&#10003;</span>
+                  )}
+                </button>
+                {neighborhoodsForCity.value.map((n) => (
+                  <button
+                    key={n.id}
+                    class={`neighborhood-item ${n.id === activeNeighborhoodId.value ? 'active' : ''}`}
+                    onClick={() => setActiveNeighborhood(n.id)}
+                  >
+                    <span class="neighborhood-name">{n.name}</span>
+                    {n.id === activeNeighborhoodId.value && (
+                      <span class="neighborhood-check">&#10003;</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
         </section>
 
         <section class="settings-section">

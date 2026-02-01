@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'preact/hooks';
-import { activeNeighborhood } from '../store/neighborhoods';
+import { activeNeighborhood, neighborhoods, selectedCityId, selectedCountryId } from '../store/neighborhoods';
 import { activeTopicIds, allTopicsActive } from '../store/topics';
 import { user, isSignedIn, signOut } from '../store/auth';
 import { AuthModal } from './AuthModal';
@@ -25,7 +25,20 @@ export function TopBar() {
   const neighborhood = activeNeighborhood.value;
   const topicCount = activeTopicIds.value.length;
 
-  const neighborhoodLabel = neighborhood ? neighborhood.name : 'All neighborhoods';
+  // Build breadcrumb from hierarchy
+  let neighborhoodLabel = 'Choose location';
+  if (neighborhood) {
+    const all = neighborhoods.value;
+    if (neighborhood.type === 'mesna_zajednica') {
+      const city = all.find((n) => n.id === neighborhood.parent_id);
+      neighborhoodLabel = city ? `${city.name} / ${neighborhood.name}` : neighborhood.name;
+    } else if (neighborhood.type === 'city') {
+      const country = all.find((n) => n.id === neighborhood.parent_id);
+      neighborhoodLabel = country ? `${country.name} / ${neighborhood.name}` : neighborhood.name;
+    } else {
+      neighborhoodLabel = neighborhood.name;
+    }
+  }
   const topicLabel = allTopicsActive.value
     ? 'all topics'
     : `${topicCount} topic${topicCount !== 1 ? 's' : ''}`;

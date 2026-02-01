@@ -22,15 +22,15 @@ export const completedSessions = computed(() =>
   sessions.value.filter((s) => s.status === 'completed')
 );
 
-export async function loadSessions({ neighborhoodId, topicIds = [] }) {
+export async function loadSessions({ neighborhoodIds = [], topicIds = [] }) {
   sessionsLoading.value = true;
 
   let query = supabase
     .from('sessions_with_topics')
     .select('*');
 
-  if (neighborhoodId) {
-    query = query.eq('neighborhood_id', neighborhoodId);
+  if (neighborhoodIds.length > 0) {
+    query = query.in('neighborhood_id', neighborhoodIds);
   }
 
   if (topicIds.length > 0) {

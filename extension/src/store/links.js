@@ -8,15 +8,15 @@ export const linksHasMore = signal(true);
 
 const PAGE_SIZE = 20;
 
-export async function loadLinks({ neighborhoodId, topicIds = [], sort = 'hot', page = 1, append = false }) {
+export async function loadLinks({ neighborhoodIds = [], topicIds = [], sort = 'hot', page = 1, append = false }) {
   linksLoading.value = true;
 
   let query = supabase
     .from('links_with_votes')
     .select('*');
 
-  if (neighborhoodId) {
-    query = query.eq('neighborhood_id', neighborhoodId);
+  if (neighborhoodIds.length > 0) {
+    query = query.in('neighborhood_id', neighborhoodIds);
   }
 
   if (topicIds.length > 0) {

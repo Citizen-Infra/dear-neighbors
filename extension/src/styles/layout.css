@@ -35,6 +35,23 @@
   grid-template-columns: 1fr;
 }
 
+.welcome-prompt {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-lg);
+  color: var(--color-text-muted);
+}
+
+.welcome-prompt h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--space-sm);
+}
+
+.welcome-prompt p {
+  font-size: 14px;
+}
+
 @media (max-width: 1024px) {
   .dashboard {
     grid-template-columns: 1fr;

@@ -4,12 +4,18 @@ import { supabase } from '../lib/supabase';
 export function PopupForm() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
-  const [neighborhoods, setNeighborhoods] = useState([]);
+  const [allNeighborhoods, setAllNeighborhoods] = useState([]);
   const [topics, setTopics] = useState([]);
 
   const [url, setUrl] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [countryId, setCountryId] = useState(
+    localStorage.getItem('dn_country') || ''
+  );
+  const [cityId, setCityId] = useState(
+    localStorage.getItem('dn_city') || ''
+  );
   const [neighborhoodId, setNeighborhoodId] = useState(
     localStorage.getItem('dn_neighborhood') || ''
   );
@@ -24,9 +30,17 @@ export function PopupForm() {
   const [magicLinkSent, setMagicLinkSent] = useState(false);
   const [sendingLink, setSendingLink] = useState(false);
 
+  // Derived lists
+  const countriesList = allNeighborhoods.filter((n) => n.type === 'country');
+  const citiesList = allNeighborhoods.filter(
+    (n) => n.type === 'city' && n.parent_id === countryId
+  );
+  const mzList = allNeighborhoods.filter(
+    (n) => n.type === 'mesna_zajednica' && n.parent_id === cityId
+  );
+
   useEffect(() => {
     (async () => {
-      // Load auth, current tab, neighborhoods, topics in parallel
       const [authResult, tabResult, neighborhoodsResult, topicsResult] = await Promise.all([
         supabase.auth.getSession(),
         new Promise((resolve) => {
@@ -46,11 +60,20 @@ export function PopupForm() {
       }
 
       if (neighborhoodsResult.data) {
-        setNeighborhoods(neighborhoodsResult.data);
-        // Default to city if no preference
-        if (!neighborhoodId && neighborhoodsResult.data.length > 0) {
-          const city = neighborhoodsResult.data.find((n) => n.type === 'city');
-          if (city) setNeighborhoodId(city.id);
+        setAllNeighborhoods(neighborhoodsResult.data);
+        // Default: if no preference, pick first country/city
+        if (!countryId && neighborhoodsResult.data.length > 0) {
+          const country = neighborhoodsResult.data.find((n) => n.type === 'country');
+          if (country) {
+            setCountryId(country.id);
+            const city = neighborhoodsResult.data.find(
+              (n) => n.type === 'city' && n.parent_id === country.id
+            );
+            if (city) {
+              setCityId(city.id);
+              setNeighborhoodId(city.id);
+            }
+          }
         }
       }
 
@@ -61,13 +84,23 @@ export function PopupForm() {
       setLoading(false);
     })();
 
-    // Listen for auth changes (magic link return)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user || null);
     });
 
     return () => subscription.unsubscribe();
   }, []);
+
+  function handleCountryChange(id) {
+    setCountryId(id);
+    setCityId('');
+    setNeighborhoodId('');
+  }
+
+  function handleCityChange(id) {
+    setCityId(id);
+    setNeighborhoodId(id); // default to "all neighborhoods" = city
+  }
 
   function toggleTopic(id) {
     setSelectedTopics((prev) =>
@@ -113,7 +146,6 @@ export function PopupForm() {
       return;
     }
 
-    // Insert topic associations
     if (selectedTopics.length > 0) {
       await supabase.from('link_topics').insert(
         selectedTopics.map((topicId) => ({ link_id: data.id, topic_id: topicId }))
@@ -123,7 +155,6 @@ export function PopupForm() {
     setSubmitting(false);
     setSuccess(true);
 
-    // Auto-close after brief delay
     setTimeout(() => window.close(), 1500);
   }
 
@@ -131,7 +162,6 @@ export function PopupForm() {
     return <div class="popup-loading">Loading...</div>;
   }
 
-  // Success state
   if (success) {
     return (
       <div class="popup-success">
@@ -141,7 +171,6 @@ export function PopupForm() {
     );
   }
 
-  // Not signed in
   if (!user) {
     return (
       <div class="popup-auth">
@@ -173,7 +202,6 @@ export function PopupForm() {
     );
   }
 
-  // Signed in — show form
   return (
     <div class="popup-form">
       <h2 class="popup-title">Share with Neighbors</h2>
@@ -209,21 +237,51 @@ export function PopupForm() {
           />
         </div>
         <div class="popup-field">
-          <label>Neighborhood</label>
+          <label>Country</label>
           <select
             class="popup-input popup-select"
-            value={neighborhoodId}
-            onChange={(e) => setNeighborhoodId(e.target.value)}
+            value={countryId}
+            onChange={(e) => handleCountryChange(e.target.value)}
             required
           >
-            <option value="">Select...</option>
-            {neighborhoods.map((n) => (
-              <option key={n.id} value={n.id}>
-                {n.type === 'city' ? n.name : `  ${n.name}`}
-              </option>
+            <option value="">Select country...</option>
+            {countriesList.map((n) => (
+              <option key={n.id} value={n.id}>{n.name}</option>
             ))}
           </select>
         </div>
+        {countryId && (
+          <div class="popup-field">
+            <label>City</label>
+            <select
+              class="popup-input popup-select"
+              value={cityId}
+              onChange={(e) => handleCityChange(e.target.value)}
+              required
+            >
+              <option value="">Select city...</option>
+              {citiesList.map((n) => (
+                <option key={n.id} value={n.id}>{n.name}</option>
+              ))}
+            </select>
+          </div>
+        )}
+        {cityId && (
+          <div class="popup-field">
+            <label>Neighborhood</label>
+            <select
+              class="popup-input popup-select"
+              value={neighborhoodId}
+              onChange={(e) => setNeighborhoodId(e.target.value)}
+              required
+            >
+              <option value={cityId}>All neighborhoods</option>
+              {mzList.map((n) => (
+                <option key={n.id} value={n.id}>{n.name}</option>
+              ))}
+            </select>
+          </div>
+        )}
         <div class="popup-field">
           <label>Topics</label>
           <div class="popup-topics">
