@@ -6,6 +6,7 @@ export const authLoading = signal(true);
 export const isAdmin = signal(false);
 
 export const isSignedIn = computed(() => user.value !== null);
+export const showAuthModal = signal(false);
 
 async function checkAdmin(userId) {
   if (!userId) { isAdmin.value = false; return; }

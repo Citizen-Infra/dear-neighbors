@@ -29,6 +29,7 @@ export function AuthModal({ onClose }) {
           <div class="auth-sent">
             <p>Check your email for a magic link!</p>
             <p class="auth-sent-email">{email}</p>
+            <p class="auth-spam-hint">Not seeing it? Check your spam folder.</p>
             <button class="auth-close-button" onClick={onClose}>
               Close
             </button>

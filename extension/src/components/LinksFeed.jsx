@@ -2,7 +2,7 @@ import { useState } from 'preact/hooks';
 import { links, linksLoading, linksHasMore, linksPage, loadLinks, toggleVote, deleteLink } from '../store/links';
 import { filterNeighborhoodIds } from '../store/neighborhoods';
 import { activeTopicIds, allTopicsActive } from '../store/topics';
-import { user, isSignedIn, isAdmin } from '../store/auth';
+import { user, isSignedIn, isAdmin, showAuthModal } from '../store/auth';
 import { SubmitLinkForm } from './SubmitLinkForm';
 import '../styles/links.css';
 
@@ -38,7 +38,7 @@ export function LinksFeed() {
   }
 
   async function handleVote(linkId) {
-    if (!isSignedIn.value) return;
+    if (!isSignedIn.value) { showAuthModal.value = true; return; }
     await toggleVote(linkId);
     loadLinks(reloadOpts());
   }
@@ -89,7 +89,7 @@ export function LinksFeed() {
           <button
             class="submit-link-button"
             onClick={() => {
-              if (!isSignedIn.value) return;
+              if (!isSignedIn.value) { showAuthModal.value = true; return; }
               setShowSubmitForm(!showSubmitForm);
             }}
             title={isSignedIn.value ? 'Share a link' : 'Sign in to share links'}

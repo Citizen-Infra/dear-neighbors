@@ -1,13 +1,12 @@
 import { useState, useRef, useEffect } from 'preact/hooks';
 import { activeNeighborhood, neighborhoods, selectedCityId, selectedCountryId } from '../store/neighborhoods';
 import { activeTopicIds, allTopicsActive } from '../store/topics';
-import { user, isSignedIn, signOut } from '../store/auth';
+import { user, isSignedIn, showAuthModal, signOut } from '../store/auth';
 import { AuthModal } from './AuthModal';
 import { SettingsModal } from './SettingsModal';
 import '../styles/topbar.css';
 
 export function TopBar() {
-  const [showAuthModal, setShowAuthModal] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef(null);
@@ -86,14 +85,14 @@ export function TopBar() {
               )}
             </div>
           ) : (
-            <button class="sign-in-button" onClick={() => setShowAuthModal(true)}>
+            <button class="sign-in-button" onClick={() => showAuthModal.value = true}>
               Sign in
             </button>
           )}
         </div>
       </div>
 
-      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
+      {showAuthModal.value && <AuthModal onClose={() => showAuthModal.value = false} />}
       {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
     </header>
   );

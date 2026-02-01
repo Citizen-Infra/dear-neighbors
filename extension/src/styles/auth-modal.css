@@ -79,6 +79,11 @@
   color: var(--color-primary);
 }
 
+.auth-spam-hint {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
 .auth-close-button {
   margin-top: var(--space-md);
   padding: var(--space-sm) var(--space-md);
