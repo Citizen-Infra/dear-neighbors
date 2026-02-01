@@ -58,7 +58,7 @@ Signals-based stores in `src/store/`:
 - `topics.js` — interest categories, multi-select filter persisted to localStorage
 - `links.js` — community links with pagination, voting, hot-ranking. Queries use `.in('neighborhood_id', ids)` for multi-neighborhood filtering.
 - `sessions.js` — participation opportunities grouped by status (active/upcoming/completed). Same `.in()` pattern.
-- `auth.js` — Supabase auth state (magic link sign-in)
+- `auth.js` — Supabase auth state (magic link sign-in), `isAdmin` signal checked against `admins` table
 - `theme.js` — light/dark/system theme
 
 ### Database
@@ -66,7 +66,8 @@ Signals-based stores in `src/store/`:
 Supabase Postgres with RLS. Schema in `api/migrations/`:
 - `neighborhoods` — hierarchical: country → city → neighborhood → block (type CHECK constraint). ~111 countries, ~340 cities seeded. Novi Sad and Krasnodar have neighborhood rows; other cities can be expanded with data-only migrations.
 - `topics` — interest categories (10 seeded)
-- `links` + `link_topics` + `link_votes` — community-curated links with hot scoring
+- `links` + `link_topics` + `link_votes` — community-curated links with hot scoring. `submitted_by` defaults to `auth.uid()`. `link_topics` and `link_votes` cascade on link delete.
+- `admins` — users who can delete any link. RLS delete policy on `links` allows submitter OR admin.
 - `sessions` + `session_topics` — participation opportunities (Harmonica, Polis, etc.)
 - `user_preferences` — saved filters for signed-in users
 - Views: `links_with_votes` (with hot_score), `sessions_with_topics`
