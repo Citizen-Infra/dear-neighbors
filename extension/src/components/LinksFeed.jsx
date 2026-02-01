@@ -1,8 +1,8 @@
 import { useState } from 'preact/hooks';
-import { links, linksLoading, linksHasMore, linksPage, loadLinks, toggleVote } from '../store/links';
+import { links, linksLoading, linksHasMore, linksPage, loadLinks, toggleVote, deleteLink } from '../store/links';
 import { filterNeighborhoodIds } from '../store/neighborhoods';
 import { activeTopicIds, allTopicsActive } from '../store/topics';
-import { isSignedIn } from '../store/auth';
+import { user, isSignedIn, isAdmin } from '../store/auth';
 import { SubmitLinkForm } from './SubmitLinkForm';
 import '../styles/links.css';
 
@@ -38,6 +38,17 @@ export function LinksFeed() {
       topicIds: allTopicsActive.value ? [] : activeTopicIds.value,
       sort,
     });
+  }
+
+  async function handleDelete(linkId) {
+    const ok = await deleteLink(linkId);
+    if (ok) {
+      loadLinks({
+        neighborhoodIds: filterNeighborhoodIds.value,
+        topicIds: allTopicsActive.value ? [] : activeTopicIds.value,
+        sort,
+      });
+    }
   }
 
   return (
@@ -92,7 +103,7 @@ export function LinksFeed() {
       ) : (
         <div class="links-list">
           {links.value.map((link) => (
-            <LinkCard key={link.id} link={link} onVote={handleVote} />
+            <LinkCard key={link.id} link={link} onVote={handleVote} onDelete={handleDelete} />
           ))}
           {linksHasMore.value && (
             <button class="load-more" onClick={handleLoadMore} disabled={linksLoading.value}>
@@ -105,9 +116,10 @@ export function LinksFeed() {
   );
 }
 
-function LinkCard({ link, onVote }) {
+function LinkCard({ link, onVote, onDelete }) {
   const domain = getDomain(link.url);
   const timeAgo = getTimeAgo(link.created_at);
+  const canDelete = isAdmin.value || (user.value && link.submitted_by === user.value.id);
 
   return (
     <article class="link-card">
@@ -138,6 +150,11 @@ function LinkCard({ link, onVote }) {
                 <span key={name} class="link-tag">{name}</span>
               ))}
             </div>
+          )}
+          {canDelete && (
+            <button class="link-delete" onClick={() => onDelete(link.id)} title="Delete link">
+              &times;
+            </button>
           )}
         </div>
       </div>

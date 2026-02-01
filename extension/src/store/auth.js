@@ -3,16 +3,25 @@ import { supabase } from '../lib/supabase';
 
 export const user = signal(null);
 export const authLoading = signal(true);
+export const isAdmin = signal(false);
 
 export const isSignedIn = computed(() => user.value !== null);
+
+async function checkAdmin(userId) {
+  if (!userId) { isAdmin.value = false; return; }
+  const { data } = await supabase.from('admins').select('user_id').eq('user_id', userId).maybeSingle();
+  isAdmin.value = !!data;
+}
 
 export async function initAuth() {
   const { data: { session } } = await supabase.auth.getSession();
   user.value = session?.user || null;
   authLoading.value = false;
+  checkAdmin(user.value?.id);
 
   supabase.auth.onAuthStateChange((_event, session) => {
     user.value = session?.user || null;
+    checkAdmin(user.value?.id);
   });
 }
 

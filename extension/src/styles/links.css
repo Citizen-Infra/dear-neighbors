@@ -172,6 +172,24 @@
   color: var(--color-text-secondary);
 }
 
+.link-delete {
+  margin-left: auto;
+  padding: 0 4px;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--color-text-muted);
+  opacity: 0;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.link-card:hover .link-delete {
+  opacity: 1;
+}
+
+.link-delete:hover {
+  color: var(--color-danger, #e53e3e);
+}
+
 .load-more {
   padding: var(--space-sm) var(--space-md);
   margin: var(--space-md) auto 0;

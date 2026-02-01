@@ -72,6 +72,15 @@ export async function submitLink({ url, title, description, neighborhoodId, topi
   return data;
 }
 
+export async function deleteLink(linkId) {
+  const { error } = await supabase.from('links').delete().eq('id', linkId);
+  if (error) {
+    console.error('Failed to delete link:', error);
+    return false;
+  }
+  return true;
+}
+
 export async function toggleVote(linkId) {
   const { data: existing } = await supabase
     .from('link_votes')
