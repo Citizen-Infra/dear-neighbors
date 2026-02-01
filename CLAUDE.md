@@ -64,7 +64,7 @@ Signals-based stores in `src/store/`:
 ### Database
 
 Supabase Postgres with RLS. Schema in `api/migrations/`:
-- `neighborhoods` — hierarchical: country → city → mesna_zajednica → block (type CHECK constraint). ~111 countries, ~340 cities seeded. Only Novi Sad has mesna_zajednica rows.
+- `neighborhoods` — hierarchical: country → city → mesna_zajednica → block (type CHECK constraint). ~111 countries, ~340 cities seeded. Novi Sad and Krasnodar have mesna_zajednica rows; other cities can be expanded with data-only migrations.
 - `topics` — interest categories (10 seeded)
 - `links` + `link_topics` + `link_votes` — community-curated links with hot scoring
 - `sessions` + `session_topics` — participation opportunities (Harmonica, Polis, etc.)
