@@ -19,7 +19,7 @@ No linting or test framework configured — code quality is via review.
 
 ### Releasing
 
-Bump version in `extension/public/manifest.json`, commit, tag `v*`, push tag. GitHub Actions (`package.yml`) builds a `.zip` and attaches it to the GitHub Release.
+Bump version in both `extension/public/manifest.json` and `extension/package.json`, commit, tag `v*`, push tag. GitHub Actions (`package.yml`) builds a `.zip` and attaches it to the GitHub Release. Update `CHANGELOG.md` with the new version's changes.
 
 ```bash
 ./scripts/package-zip.sh             # Local: build + create .zip
@@ -63,7 +63,7 @@ Signals-based stores in `src/store/`:
 - `topics.js` — interest categories, multi-select filter persisted to localStorage
 - `links.js` — community links with pagination, voting, hot-ranking. Queries use `.in('neighborhood_id', ids)` for multi-neighborhood filtering.
 - `sessions.js` — participation opportunities grouped by status (active/upcoming/completed). Same `.in()` pattern.
-- `auth.js` — Supabase auth state (magic link sign-in), `isAdmin` signal checked against `admins` table
+- `auth.js` — Supabase auth state (magic link sign-in), `isAdmin` signal checked against `admins` table. `showAuthModal` signal allows any component to trigger the sign-in modal (used by vote/share buttons when not signed in).
 - `theme.js` — light/dark/system theme
 
 ### Database
@@ -90,7 +90,8 @@ Supabase Postgres with RLS. Schema in `api/migrations/`:
 - `base: ''` in vite.config.js — Chrome extensions need relative paths
 - Supabase env vars `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` must be set at build time — Vite inlines them. Locally via `.env.local`, in CI via GitHub Actions secrets. Without them the extension shows a white page (`supabaseUrl is required`)
 - `host_permissions: ["<all_urls>"]` in manifest.json — required for SubmitLinkForm's cross-origin URL metadata fetch
-- Anonymous users can browse; sign-in (magic link) required to submit/vote
+- Anonymous users can browse; sign-in (magic link) required to submit/vote. Auth-gated actions should open the sign-in modal (`showAuthModal.value = true`) rather than silently failing.
+- Supabase free tier rate-limits magic link emails (~3-4/hour/user). The auth UI handles 429 errors with a user-facing message.
 - Neighborhood queries use `.in()` with arrays of IDs (BFS descendants), not single `.eq()`
 - Supabase RLS scoping: queries touching user-specific data (e.g. `link_votes`) must include `.eq('user_id', userId)` — the DB uses `auth.uid()` in RLS policies and view definitions, but client-side queries still need explicit user scoping
 - Adding neighborhoods for new cities is a data-only migration — no code changes needed
