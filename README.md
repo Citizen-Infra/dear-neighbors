@@ -6,6 +6,8 @@ Chrome extension that replaces the new tab page with a neighborhood dashboard. C
 
 Part of the [NSRT](https://github.com/Citizen-Infra) (Novi Sad Relational Tech) citizen infrastructure ecosystem.
 
+<img width="2520" height="1584" alt="image" src="https://github.com/user-attachments/assets/dc56cc56-bbcb-4496-9831-5c41b8c8551d" />
+
 ## How it works
 
 - **Pick your location** — Country → City → Neighborhood (or "all neighborhoods")
