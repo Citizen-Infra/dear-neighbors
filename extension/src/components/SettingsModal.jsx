@@ -9,6 +9,7 @@ import { theme, setTheme } from '../store/theme';
 import { uiLanguage, setUiLanguage, t } from '../lib/i18n';
 import { contentLanguageFilter, setContentLanguageFilter } from '../store/language';
 import '../styles/settings-modal.css';
+import '../styles/language.css';
 
 export function SettingsModal({ onClose }) {
   return (
@@ -23,17 +24,19 @@ export function SettingsModal({ onClose }) {
 
         <section class="settings-section">
           <h4 class="settings-section-title">{t('settings.interfaceLanguage')}</h4>
-          <div class="theme-picker">
+          <div class="lang-switch">
             <button
-              class={`topic-grid-chip ${uiLanguage.value === 'en' ? 'active' : ''}`}
+              class={`lang-switch-option ${uiLanguage.value === 'en' ? 'active' : ''}`}
               onClick={() => setUiLanguage('en')}
             >
+              <span class="lang-glyph">A</span>
               English
             </button>
             <button
-              class={`topic-grid-chip ${uiLanguage.value === 'sr' ? 'active' : ''}`}
+              class={`lang-switch-option ${uiLanguage.value === 'sr' ? 'active' : ''}`}
               onClick={() => setUiLanguage('sr')}
             >
+              <span class="lang-glyph">{'\u0416'}</span>
               Srpski
             </button>
           </div>
@@ -143,12 +146,14 @@ export function SettingsModal({ onClose }) {
         <section class="settings-section">
           <label class="settings-toggle-row">
             <span class="settings-toggle-label">{t('settings.participation')}</span>
-            <input
-              type="checkbox"
-              class="settings-toggle-checkbox"
-              checked={showSessions.value}
-              onChange={(e) => setShowSessions(e.target.checked)}
-            />
+            <label class="settings-toggle-switch">
+              <input
+                type="checkbox"
+                checked={showSessions.value}
+                onChange={(e) => setShowSessions(e.target.checked)}
+              />
+              <span class="settings-toggle-track" />
+            </label>
           </label>
           <p class="settings-hint">{t('settings.participationHint')}</p>
         </section>
@@ -156,12 +161,14 @@ export function SettingsModal({ onClose }) {
         <section class="settings-section">
           <label class="settings-toggle-row">
             <span class="settings-toggle-label">{t('settings.contentFilter')}</span>
-            <input
-              type="checkbox"
-              class="settings-toggle-checkbox"
-              checked={contentLanguageFilter.value}
-              onChange={(e) => setContentLanguageFilter(e.target.checked)}
-            />
+            <label class="settings-toggle-switch">
+              <input
+                type="checkbox"
+                checked={contentLanguageFilter.value}
+                onChange={(e) => setContentLanguageFilter(e.target.checked)}
+              />
+              <span class="settings-toggle-track" />
+            </label>
           </label>
           <p class="settings-hint">{t('settings.contentFilterHint')}</p>
         </section>

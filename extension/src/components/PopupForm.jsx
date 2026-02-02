@@ -2,6 +2,7 @@ import { useState, useEffect } from 'preact/hooks';
 import { supabase } from '../lib/supabase';
 import { t } from '../lib/i18n';
 import { detectLanguage } from '../lib/detect-language';
+import '../styles/language.css';
 
 export function PopupForm() {
   const [loading, setLoading] = useState(true);
@@ -312,19 +313,21 @@ export function PopupForm() {
         </div>
         <div class="popup-field">
           <label>{t('popup.language')}</label>
-          <div class="popup-topics">
+          <div class="lang-switch lang-switch--compact">
             <button
               type="button"
-              class={`popup-topic-chip ${language === 'en' ? 'active' : ''}`}
+              class={`lang-switch-option ${language === 'en' ? 'active' : ''}`}
               onClick={() => setLanguage('en')}
             >
+              <span class="lang-glyph">A</span>
               English
             </button>
             <button
               type="button"
-              class={`popup-topic-chip ${language === 'sr' ? 'active' : ''}`}
+              class={`lang-switch-option ${language === 'sr' ? 'active' : ''}`}
               onClick={() => setLanguage('sr')}
             >
+              <span class="lang-glyph">{'\u0416'}</span>
               Srpski
             </button>
           </div>

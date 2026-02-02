@@ -5,6 +5,7 @@ import { topics } from '../store/topics';
 import { t } from '../lib/i18n';
 import { detectLanguage } from '../lib/detect-language';
 import '../styles/submit-form.css';
+import '../styles/language.css';
 
 export function SubmitLinkForm({ onClose, onSubmitted }) {
   const [url, setUrl] = useState('');
@@ -136,19 +137,21 @@ export function SubmitLinkForm({ onClose, onSubmitted }) {
       </div>
       <div class="submit-form-field">
         <label class="settings-label">{t('submit.language')}</label>
-        <div class="submit-form-topics">
+        <div class="lang-switch lang-switch--compact">
           <button
             type="button"
-            class={`topic-chip ${language === 'en' ? 'active' : ''}`}
+            class={`lang-switch-option ${language === 'en' ? 'active' : ''}`}
             onClick={() => { languageTouched.current = true; setLanguage('en'); }}
           >
+            <span class="lang-glyph">A</span>
             English
           </button>
           <button
             type="button"
-            class={`topic-chip ${language === 'sr' ? 'active' : ''}`}
+            class={`lang-switch-option ${language === 'sr' ? 'active' : ''}`}
             onClick={() => { languageTouched.current = true; setLanguage('sr'); }}
           >
+            <span class="lang-glyph">{'\u0416'}</span>
             Srpski
           </button>
         </div>
