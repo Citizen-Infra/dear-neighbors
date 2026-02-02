@@ -6,6 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Dear Neighbors** — Chrome extension that replaces the new tab page with a neighborhood dashboard. Community-curated local news links + participation opportunities (Harmonica sessions, Polis conversations, etc.). Part of the Citizen Infrastructure ecosystem (NSRT).
 
+## Skills
+
+Always use the `frontend-design` skill for visual/UI tasks: icons, component design, styling, layout changes.
+
 ## Commands
 
 ```bash
@@ -25,6 +29,10 @@ Bump version in both `extension/public/manifest.json` and `extension/package.jso
 ./scripts/package-zip.sh             # Local: build + create .zip
 ./scripts/package-zip.sh --skip-build  # Use existing dist/
 ```
+
+### Icons
+
+SVG source at `extension/public/icons/icon.svg`. Generate PNGs: `npx sharp-cli -i icon.svg -o icon-{size}.png resize {size} {size}` for 16, 48, 128.
 
 ### Migrations
 
@@ -96,6 +104,7 @@ Supabase Postgres with RLS. Schema in `api/migrations/`:
 - Neighborhood queries use `.in()` with arrays of IDs (BFS descendants), not single `.eq()`
 - Supabase RLS scoping: queries touching user-specific data (e.g. `link_votes`) must include `.eq('user_id', userId)` — the DB uses `auth.uid()` in RLS policies and view definitions, but client-side queries still need explicit user scoping
 - Adding neighborhoods for new cities is a data-only migration — no code changes needed
+- `auth-modal.css` defines `.modal-overlay` used by both SettingsModal and other overlays — don't remove shared classes when refactoring
 
 ## Related Projects
 
