@@ -1,3 +1,4 @@
+import { useState } from 'preact/hooks';
 import {
   neighborhoods, activeNeighborhoodId, selectedCountryId, selectedCityId,
   countries, citiesForCountry, neighborhoodsForCity,
@@ -8,10 +9,33 @@ import { showSessions, setShowSessions } from '../store/sessions';
 import { theme, setTheme } from '../store/theme';
 import { uiLanguage, setUiLanguage, t } from '../lib/i18n';
 import { contentLanguageFilter, setContentLanguageFilter } from '../store/language';
+import { user, isSignedIn, signInWithMagicLink, signOut } from '../store/auth';
 import '../styles/settings-modal.css';
 import '../styles/language.css';
+import '../styles/auth-modal.css';
 
 export function SettingsModal({ onClose }) {
+  const [email, setEmail] = useState('');
+  const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState(null);
+
+  async function handleAuthSubmit(e) {
+    e.preventDefault();
+    if (!email.trim()) return;
+
+    setError(null);
+    setSending(true);
+    const result = await signInWithMagicLink(email.trim());
+    setSending(false);
+
+    if (result.ok) {
+      setSent(true);
+    } else {
+      setError(result.error);
+    }
+  }
+
   return (
     <div class="modal-overlay" onClick={onClose}>
       <div class="settings-modal" onClick={(e) => e.stopPropagation()}>
@@ -21,6 +45,47 @@ export function SettingsModal({ onClose }) {
             &times;
           </button>
         </div>
+
+        <section class="settings-section">
+          <h4 class="settings-section-title">{t('settings.account')}</h4>
+
+          {isSignedIn.value ? (
+            <div class="auth-inline">
+              <p class="auth-inline-status">
+                {t('settings.signedInAs')} <strong>{user.value.email}</strong>
+              </p>
+              <button class="auth-inline-signout" onClick={signOut}>
+                {t('topbar.signOut')}
+              </button>
+            </div>
+          ) : sent ? (
+            <div class="auth-inline">
+              <div class="auth-sent">
+                <p>{t('auth.checkEmail')}</p>
+                <p class="auth-sent-email">{email}</p>
+                <p class="auth-spam-hint">{t('auth.spamHint')}</p>
+              </div>
+            </div>
+          ) : (
+            <div class="auth-inline">
+              <p class="auth-description">{t('auth.description')}</p>
+              <form onSubmit={handleAuthSubmit}>
+                <input
+                  type="email"
+                  class="auth-input"
+                  placeholder={t('auth.placeholder')}
+                  value={email}
+                  onInput={(e) => setEmail(e.target.value)}
+                  required
+                />
+                {error && <p class="auth-error">{error}</p>}
+                <button type="submit" class="auth-submit" disabled={sending}>
+                  {sending ? t('auth.sending') : t('auth.send')}
+                </button>
+              </form>
+            </div>
+          )}
+        </section>
 
         <section class="settings-section">
           <h4 class="settings-section-title">{t('settings.interfaceLanguage')}</h4>
@@ -172,6 +237,7 @@ export function SettingsModal({ onClose }) {
           </label>
           <p class="settings-hint">{t('settings.contentFilterHint')}</p>
         </section>
+
       </div>
     </div>
   );

@@ -38,6 +38,8 @@ const translations = {
     'settings.interfaceLanguage': 'Interface Language',
     'settings.contentFilter': 'Content Language Filter',
     'settings.contentFilterHint': 'Show only content matching your interface language.',
+    'settings.account': 'Account',
+    'settings.signedInAs': 'Signed in as',
 
     // LinksFeed
     'links.title': 'Community Links',
@@ -92,6 +94,8 @@ const translations = {
     'onboarding.selectCountry': 'Select your country',
     'onboarding.selectCity': 'Select your city',
     'onboarding.languageStep': 'Choose your language',
+    'onboarding.accountStep': 'Sign in (optional)',
+    'onboarding.skipSignIn': 'Continue without signing in',
     'onboarding.getStarted': 'Get Started',
 
     // Welcome
@@ -169,6 +173,8 @@ const translations = {
     'settings.interfaceLanguage': 'Jezik interfejsa',
     'settings.contentFilter': 'Filter jezika sadržaja',
     'settings.contentFilterHint': 'Prikaži samo sadržaj na jeziku interfejsa.',
+    'settings.account': 'Nalog',
+    'settings.signedInAs': 'Prijavljeni kao',
 
     // LinksFeed
     'links.title': 'Linkovi zajednice',
@@ -223,6 +229,8 @@ const translations = {
     'onboarding.selectCountry': 'Izaberite državu',
     'onboarding.selectCity': 'Izaberite grad',
     'onboarding.languageStep': 'Izaberite jezik',
+    'onboarding.accountStep': 'Prijava (opciono)',
+    'onboarding.skipSignIn': 'Nastavi bez prijave',
     'onboarding.getStarted': 'Započni',
 
     // Welcome

@@ -5,11 +5,17 @@ import {
   setSelectedCountry, setSelectedCity,
 } from '../store/neighborhoods';
 import { uiLanguage, setUiLanguage, t } from '../lib/i18n';
+import { signInWithMagicLink } from '../store/auth';
 import '../styles/onboarding-modal.css';
 import '../styles/language.css';
+import '../styles/auth-modal.css';
 
 export function OnboardingModal({ onComplete }) {
   const [step, setStep] = useState(1);
+  const [email, setEmail] = useState('');
+  const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState(null);
 
   const countrySelected = Boolean(selectedCountryId.value);
   const citySelected = Boolean(selectedCityId.value);
@@ -28,6 +34,22 @@ export function OnboardingModal({ onComplete }) {
     onComplete();
   }
 
+  async function handleAuthSubmit(e) {
+    e.preventDefault();
+    if (!email.trim()) return;
+
+    setError(null);
+    setSending(true);
+    const result = await signInWithMagicLink(email.trim());
+    setSending(false);
+
+    if (result.ok) {
+      setSent(true);
+    } else {
+      setError(result.error);
+    }
+  }
+
   return (
     <div class="onboarding-overlay">
       <div class="onboarding-modal">
@@ -41,7 +63,11 @@ export function OnboardingModal({ onComplete }) {
           <span class="onboarding-line">
             <span class={`onboarding-line-fill ${step >= 2 ? 'filled' : ''}`} />
           </span>
-          <span class={`onboarding-dot ${step >= 2 ? 'active' : ''}`} />
+          <span class={`onboarding-dot ${step >= 3 ? 'done' : step >= 2 ? 'active' : ''}`} />
+          <span class="onboarding-line">
+            <span class={`onboarding-line-fill ${step >= 3 ? 'filled' : ''}`} />
+          </span>
+          <span class={`onboarding-dot ${step >= 3 ? 'active' : ''}`} />
         </div>
 
         <div class="onboarding-body">
@@ -99,11 +125,46 @@ export function OnboardingModal({ onComplete }) {
                 </div>
               </section>
             )}
+
+            {/* Step 3: Account (optional) */}
+            {step >= 2 && citySelected && (
+              <section class="onboarding-step">
+                <label class="onboarding-label">{t('onboarding.accountStep')}</label>
+
+                {sent ? (
+                  <div class="auth-inline">
+                    <div class="auth-sent">
+                      <p>{t('auth.checkEmail')}</p>
+                      <p class="auth-sent-email">{email}</p>
+                      <p class="auth-spam-hint">{t('auth.spamHint')}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div class="auth-inline">
+                    <form onSubmit={handleAuthSubmit}>
+                      <input
+                        type="email"
+                        class="auth-input"
+                        placeholder={t('auth.placeholder')}
+                        value={email}
+                        onInput={(e) => setEmail(e.target.value)}
+                        onFocus={() => setStep(3)}
+                        required
+                      />
+                      {error && <p class="auth-error">{error}</p>}
+                      <button type="submit" class="auth-submit" disabled={sending}>
+                        {sending ? t('auth.sending') : t('auth.send')}
+                      </button>
+                    </form>
+                  </div>
+                )}
+              </section>
+            )}
           </div>
 
           {step >= 2 && citySelected && (
             <button class="onboarding-cta" onClick={handleFinish}>
-              {t('onboarding.getStarted')}
+              {sent ? t('onboarding.getStarted') : t('onboarding.skipSignIn')}
             </button>
           )}
         </div>

@@ -1,3 +1,4 @@
+/* Shared modal overlay */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -8,19 +9,36 @@
   z-index: 200;
 }
 
-.auth-modal {
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  padding: var(--space-xl);
-  width: 380px;
-  max-width: 90vw;
-  box-shadow: var(--shadow-lg);
+/* Inline auth form — used inside SettingsModal and OnboardingModal */
+.auth-inline {
+  padding: var(--space-sm) 0;
 }
 
-.auth-modal-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: var(--space-md);
+.auth-inline-status {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-sm);
+  line-height: 1.5;
+}
+
+.auth-inline-status strong {
+  color: var(--color-text);
+}
+
+.auth-inline-signout {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  transition: all 0.15s ease;
+}
+
+.auth-inline-signout:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-text-muted);
+  color: var(--color-text);
 }
 
 .auth-description {
@@ -88,11 +106,4 @@
 .auth-spam-hint {
   font-size: 12px;
   color: var(--color-text-muted);
-}
-
-.auth-close-button {
-  margin-top: var(--space-md);
-  padding: var(--space-sm) var(--space-md);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
 }
