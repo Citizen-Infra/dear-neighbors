@@ -238,6 +238,10 @@ export function SettingsModal({ onClose }) {
           <p class="settings-hint">{t('settings.contentFilterHint')}</p>
         </section>
 
+        <footer class="settings-about">
+          Built by <a href="https://github.com/Citizen-Infra" target="_blank" rel="noopener">Citizen Infra</a>
+        </footer>
+
       </div>
     </div>
   );

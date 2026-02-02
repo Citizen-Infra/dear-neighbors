@@ -302,3 +302,20 @@
   cursor: pointer;
   accent-color: var(--color-primary);
 }
+
+/* About footer */
+.settings-about {
+  margin-top: var(--space-lg);
+  text-align: center;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.settings-about a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.settings-about a:hover {
+  text-decoration: underline;
+}
