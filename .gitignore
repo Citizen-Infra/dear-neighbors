@@ -8,4 +8,5 @@ dist/
 Thumbs.db
 *.zip
 .zip-stage/
+cws/
 OSS-AUDIT.md

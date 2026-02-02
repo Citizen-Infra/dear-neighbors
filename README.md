@@ -2,7 +2,7 @@
 
 [![Package](https://github.com/Citizen-Infra/dear-neighbors/actions/workflows/package.yml/badge.svg)](https://github.com/Citizen-Infra/dear-neighbors/actions/workflows/package.yml)
 
-![Dear Neighbors](cws/marquee.png)
+![Dear Neighbors](docs/marquee.png)
 
 Chrome extension that replaces the new tab page with a neighborhood dashboard. Community-curated local news links and participation opportunities (deliberation sessions, conversations, community meetings) scoped to your city and neighborhood.
 
