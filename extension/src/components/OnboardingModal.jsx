@@ -86,14 +86,14 @@ export function OnboardingModal({ onComplete }) {
                     class={`lang-switch-option ${uiLanguage.value === 'en' ? 'active' : ''}`}
                     onClick={() => setUiLanguage('en')}
                   >
-                    <span class="lang-glyph">A</span>
+                    <span class="lang-flag">{'\uD83C\uDDEC\uD83C\uDDE7'}</span>
                     English
                   </button>
                   <button
                     class={`lang-switch-option ${uiLanguage.value === 'sr' ? 'active' : ''}`}
                     onClick={() => setUiLanguage('sr')}
                   >
-                    <span class="lang-glyph">{'\u0416'}</span>
+                    <span class="lang-flag">{'\uD83C\uDDF7\uD83C\uDDF8'}</span>
                     Srpski
                   </button>
                 </div>

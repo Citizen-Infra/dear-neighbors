@@ -319,7 +319,7 @@ export function PopupForm() {
               class={`lang-switch-option ${language === 'en' ? 'active' : ''}`}
               onClick={() => setLanguage('en')}
             >
-              <span class="lang-glyph">A</span>
+              <span class="lang-flag">{'\uD83C\uDDEC\uD83C\uDDE7'}</span>
               English
             </button>
             <button
@@ -327,7 +327,7 @@ export function PopupForm() {
               class={`lang-switch-option ${language === 'sr' ? 'active' : ''}`}
               onClick={() => setLanguage('sr')}
             >
-              <span class="lang-glyph">{'\u0416'}</span>
+              <span class="lang-flag">{'\uD83C\uDDF7\uD83C\uDDF8'}</span>
               Srpski
             </button>
           </div>
