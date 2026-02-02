@@ -2,6 +2,7 @@
   "name": "dear-neighbors",
   "version": "0.1.8",
   "private": true,
+  "license": "AGPL-3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
