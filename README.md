@@ -4,7 +4,7 @@
 
 Chrome extension that replaces the new tab page with a neighborhood dashboard. Community-curated local news links and participation opportunities (deliberation sessions, conversations, community meetings) scoped to your city and neighborhood.
 
-Part of the [NSRT](https://github.com/Citizen-Infra) (Novi Sad Relational Tech) citizen infrastructure ecosystem.
+Part of the [NSRT](https://github.com/Citizen-Infra/nsrt) (Novi Sad Relational Tech) citizen infrastructure ecosystem.
 
 <img width="2520" height="1584" alt="image" src="https://github.com/user-attachments/assets/dc56cc56-bbcb-4496-9831-5c41b8c8551d" />
 
