@@ -46,7 +46,7 @@ SQL migrations in `api/migrations/` applied via MCP tool (`mcp__supabase__apply_
 
 ### CWS Assets
 
-`cws/` — Chrome Web Store listing materials: `listing.md` (description, privacy declaration), promo images (440x280 + 1400x560 in SVG/PNG), `screenshots.md` (capture guide).
+`cws/` (gitignored, local only) — Chrome Web Store listing materials: `listing.md` (description, privacy declaration), promo images (440x280 + 1400x560 in SVG/PNG), `screenshots.md` (capture guide).
 
 ## Architecture
 
