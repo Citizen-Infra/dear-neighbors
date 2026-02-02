@@ -1,5 +1,6 @@
 import { useState } from 'preact/hooks';
 import { signInWithMagicLink } from '../store/auth';
+import { t } from '../lib/i18n';
 import '../styles/auth-modal.css';
 
 export function AuthModal({ onClose }) {
@@ -27,26 +28,26 @@ export function AuthModal({ onClose }) {
   return (
     <div class="modal-overlay" onClick={onClose}>
       <div class="auth-modal" onClick={(e) => e.stopPropagation()}>
-        <h3 class="auth-modal-title">Sign in to Dear Neighbors</h3>
+        <h3 class="auth-modal-title">{t('auth.title')}</h3>
 
         {sent ? (
           <div class="auth-sent">
-            <p>Check your email for a magic link!</p>
+            <p>{t('auth.checkEmail')}</p>
             <p class="auth-sent-email">{email}</p>
-            <p class="auth-spam-hint">Not seeing it? Check your spam folder.</p>
+            <p class="auth-spam-hint">{t('auth.spamHint')}</p>
             <button class="auth-close-button" onClick={onClose}>
-              Close
+              {t('auth.close')}
             </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit}>
             <p class="auth-description">
-              Sign in to share links and upvote posts from your neighbors.
+              {t('auth.description')}
             </p>
             <input
               type="email"
               class="auth-input"
-              placeholder="your@email.com"
+              placeholder={t('auth.placeholder')}
               value={email}
               onInput={(e) => setEmail(e.target.value)}
               required
@@ -54,7 +55,7 @@ export function AuthModal({ onClose }) {
             />
             {error && <p class="auth-error">{error}</p>}
             <button type="submit" class="auth-submit" disabled={sending}>
-              {sending ? 'Sending...' : 'Send magic link'}
+              {sending ? t('auth.sending') : t('auth.send')}
             </button>
           </form>
         )}

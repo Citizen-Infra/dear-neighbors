@@ -22,7 +22,7 @@ export const completedSessions = computed(() =>
   sessions.value.filter((s) => s.status === 'completed')
 );
 
-export async function loadSessions({ neighborhoodIds = [], topicIds = [] }) {
+export async function loadSessions({ neighborhoodIds = [], topicIds = [], language = null }) {
   sessionsLoading.value = true;
 
   let query = supabase
@@ -35,6 +35,10 @@ export async function loadSessions({ neighborhoodIds = [], topicIds = [] }) {
 
   if (topicIds.length > 0) {
     query = query.contains('topic_ids', topicIds);
+  }
+
+  if (language) {
+    query = query.eq('language', language);
   }
 
   query = query.order('starts_at', { ascending: true });

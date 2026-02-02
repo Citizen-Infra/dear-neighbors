@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'preact/hooks';
 import { supabase } from '../lib/supabase';
+import { t } from '../lib/i18n';
+import { detectLanguage } from '../lib/detect-language';
 
 export function PopupForm() {
   const [loading, setLoading] = useState(true);
@@ -20,6 +22,9 @@ export function PopupForm() {
     localStorage.getItem('dn_neighborhood') || ''
   );
   const [selectedTopics, setSelectedTopics] = useState([]);
+  const [language, setLanguage] = useState(
+    localStorage.getItem('dn_ui_language') || 'en'
+  );
 
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -56,7 +61,10 @@ export function PopupForm() {
 
       if (tabResult) {
         setUrl(tabResult.url || '');
-        setTitle(tabResult.title || '');
+        const tabTitle = tabResult.title || '';
+        setTitle(tabTitle);
+        const detected = detectLanguage(tabTitle);
+        setLanguage(detected);
       }
 
       if (neighborhoodsResult.data) {
@@ -117,7 +125,7 @@ export function PopupForm() {
     setSendingLink(false);
     if (error) {
       setError(error.status === 429
-        ? 'Too many attempts. Please wait a few minutes before trying again.'
+        ? t('auth.tooMany')
         : error.message);
     } else {
       setMagicLinkSent(true);
@@ -139,6 +147,7 @@ export function PopupForm() {
         description: description.trim() || null,
         neighborhood_id: neighborhoodId,
         submitted_by: user.id,
+        language,
       })
       .select()
       .single();
@@ -162,14 +171,14 @@ export function PopupForm() {
   }
 
   if (loading) {
-    return <div class="popup-loading">Loading...</div>;
+    return <div class="popup-loading">{t('popup.loading')}</div>;
   }
 
   if (success) {
     return (
       <div class="popup-success">
         <span class="popup-checkmark">&#10003;</span>
-        <p>Shared with neighbors!</p>
+        <p>{t('popup.success')}</p>
       </div>
     );
   }
@@ -177,27 +186,27 @@ export function PopupForm() {
   if (!user) {
     return (
       <div class="popup-auth">
-        <h2 class="popup-title">Dear Neighbors</h2>
+        <h2 class="popup-title">{t('popup.title')}</h2>
         {magicLinkSent ? (
           <div class="popup-magic-sent">
-            <p>Check your email for a magic link!</p>
+            <p>{t('popup.checkEmail')}</p>
             <p class="popup-magic-email">{email}</p>
-            <p class="popup-spam-hint">Not seeing it? Check your spam folder.</p>
+            <p class="popup-spam-hint">{t('popup.spamHint')}</p>
           </div>
         ) : (
           <form onSubmit={handleSignIn}>
-            <p class="popup-auth-desc">Sign in to share links with your neighbors.</p>
+            <p class="popup-auth-desc">{t('popup.signInDesc')}</p>
             <input
               type="email"
               class="popup-input"
-              placeholder="your@email.com"
+              placeholder={t('auth.placeholder')}
               value={email}
               onInput={(e) => setEmail(e.target.value)}
               required
               autofocus
             />
             <button type="submit" class="popup-submit" disabled={sendingLink}>
-              {sendingLink ? 'Sending...' : 'Send magic link'}
+              {sendingLink ? t('popup.sending') : t('popup.send')}
             </button>
           </form>
         )}
@@ -208,10 +217,10 @@ export function PopupForm() {
 
   return (
     <div class="popup-form">
-      <h2 class="popup-title">Share with Neighbors</h2>
+      <h2 class="popup-title">{t('popup.shareTitle')}</h2>
       <form onSubmit={handleSubmit}>
         <div class="popup-field">
-          <label>URL</label>
+          <label>{t('popup.url')}</label>
           <input
             type="url"
             class="popup-input"
@@ -221,7 +230,7 @@ export function PopupForm() {
           />
         </div>
         <div class="popup-field">
-          <label>Title</label>
+          <label>{t('popup.titleField')}</label>
           <input
             type="text"
             class="popup-input"
@@ -231,24 +240,24 @@ export function PopupForm() {
           />
         </div>
         <div class="popup-field">
-          <label>Description <span class="popup-optional">(optional)</span></label>
+          <label>{t('popup.descriptionField')} <span class="popup-optional">{t('popup.optional')}</span></label>
           <textarea
             class="popup-input popup-textarea"
             value={description}
             onInput={(e) => setDescription(e.target.value)}
             rows={2}
-            placeholder="Why is this relevant?"
+            placeholder={t('popup.descPlaceholder')}
           />
         </div>
         <div class="popup-field">
-          <label>Country</label>
+          <label>{t('popup.country')}</label>
           <select
             class="popup-input popup-select"
             value={countryId}
             onChange={(e) => handleCountryChange(e.target.value)}
             required
           >
-            <option value="">Select country...</option>
+            <option value="">{t('popup.selectCountry')}</option>
             {countriesList.map((n) => (
               <option key={n.id} value={n.id}>{n.name}</option>
             ))}
@@ -256,14 +265,14 @@ export function PopupForm() {
         </div>
         {countryId && (
           <div class="popup-field">
-            <label>City</label>
+            <label>{t('popup.city')}</label>
             <select
               class="popup-input popup-select"
               value={cityId}
               onChange={(e) => handleCityChange(e.target.value)}
               required
             >
-              <option value="">Select city...</option>
+              <option value="">{t('popup.selectCity')}</option>
               {citiesList.map((n) => (
                 <option key={n.id} value={n.id}>{n.name}</option>
               ))}
@@ -272,14 +281,14 @@ export function PopupForm() {
         )}
         {cityId && (
           <div class="popup-field">
-            <label>Neighborhood</label>
+            <label>{t('popup.neighborhood')}</label>
             <select
               class="popup-input popup-select"
               value={neighborhoodId}
               onChange={(e) => setNeighborhoodId(e.target.value)}
               required
             >
-              <option value={cityId}>All neighborhoods</option>
+              <option value={cityId}>{t('popup.allNeighborhoods')}</option>
               {mzList.map((n) => (
                 <option key={n.id} value={n.id}>{n.name}</option>
               ))}
@@ -287,23 +296,42 @@ export function PopupForm() {
           </div>
         )}
         <div class="popup-field">
-          <label>Topics</label>
+          <label>{t('popup.topics')}</label>
           <div class="popup-topics">
-            {topics.map((t) => (
+            {topics.map((tp) => (
               <button
-                key={t.id}
+                key={tp.id}
                 type="button"
-                class={`popup-topic-chip ${selectedTopics.includes(t.id) ? 'active' : ''}`}
-                onClick={() => toggleTopic(t.id)}
+                class={`popup-topic-chip ${selectedTopics.includes(tp.id) ? 'active' : ''}`}
+                onClick={() => toggleTopic(tp.id)}
               >
-                {t.name}
+                {tp.name}
               </button>
             ))}
           </div>
         </div>
+        <div class="popup-field">
+          <label>{t('popup.language')}</label>
+          <div class="popup-topics">
+            <button
+              type="button"
+              class={`popup-topic-chip ${language === 'en' ? 'active' : ''}`}
+              onClick={() => setLanguage('en')}
+            >
+              English
+            </button>
+            <button
+              type="button"
+              class={`popup-topic-chip ${language === 'sr' ? 'active' : ''}`}
+              onClick={() => setLanguage('sr')}
+            >
+              Srpski
+            </button>
+          </div>
+        </div>
         {error && <p class="popup-error">{error}</p>}
         <button type="submit" class="popup-submit" disabled={submitting}>
-          {submitting ? 'Sharing...' : 'Share'}
+          {submitting ? t('popup.sharing') : t('popup.share')}
         </button>
       </form>
     </div>

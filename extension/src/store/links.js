@@ -9,7 +9,7 @@ export const linksHasMore = signal(true);
 
 const PAGE_SIZE = 20;
 
-export async function loadLinks({ neighborhoodIds = [], topicIds = [], sort = 'hot', topRange, page = 1, append = false }) {
+export async function loadLinks({ neighborhoodIds = [], topicIds = [], sort = 'hot', topRange, page = 1, append = false, language = null }) {
   linksLoading.value = true;
 
   let query = supabase
@@ -22,6 +22,10 @@ export async function loadLinks({ neighborhoodIds = [], topicIds = [], sort = 'h
 
   if (topicIds.length > 0) {
     query = query.contains('topic_ids', topicIds);
+  }
+
+  if (language) {
+    query = query.eq('language', language);
   }
 
   if (sort === 'top' && topRange && topRange !== 'all') {
@@ -60,10 +64,10 @@ export async function loadLinks({ neighborhoodIds = [], topicIds = [], sort = 'h
   linksLoading.value = false;
 }
 
-export async function submitLink({ url, title, description, neighborhoodId, topicIds }) {
+export async function submitLink({ url, title, description, neighborhoodId, topicIds, language = 'en' }) {
   const { data, error } = await supabase
     .from('links')
-    .insert({ url, title, description, neighborhood_id: neighborhoodId })
+    .insert({ url, title, description, neighborhood_id: neighborhoodId, language })
     .select()
     .single();
 

@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'preact/hooks';
 import { submitLink } from '../store/links';
 import { activeNeighborhoodId } from '../store/neighborhoods';
 import { topics } from '../store/topics';
+import { t } from '../lib/i18n';
+import { detectLanguage } from '../lib/detect-language';
 import '../styles/submit-form.css';
 
 export function SubmitLinkForm({ onClose, onSubmitted }) {
@@ -9,10 +11,12 @@ export function SubmitLinkForm({ onClose, onSubmitted }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedTopics, setSelectedTopics] = useState([]);
+  const [language, setLanguage] = useState('en');
   const [submitting, setSubmitting] = useState(false);
   const [fetching, setFetching] = useState(false);
   const titleTouched = useRef(false);
   const descTouched = useRef(false);
+  const languageTouched = useRef(false);
 
   useEffect(() => {
     if (!url.trim()) return;
@@ -25,18 +29,32 @@ export function SubmitLinkForm({ onClose, onSubmitted }) {
         const html = await res.text();
         const doc = new DOMParser().parseFromString(html, 'text/html');
 
+        let fetchedTitle = '';
+        let fetchedDesc = '';
+
         if (!titleTouched.current) {
           const ogTitle = doc.querySelector('meta[property="og:title"]')?.content;
           const pageTitle = doc.querySelector('title')?.textContent;
           const found = ogTitle || pageTitle;
-          if (found) setTitle(found.trim());
+          if (found) {
+            fetchedTitle = found.trim();
+            setTitle(fetchedTitle);
+          }
         }
 
         if (!descTouched.current) {
           const ogDesc = doc.querySelector('meta[property="og:description"]')?.content;
           const metaDesc = doc.querySelector('meta[name="description"]')?.content;
           const found = ogDesc || metaDesc;
-          if (found) setDescription(found.trim());
+          if (found) {
+            fetchedDesc = found.trim();
+            setDescription(fetchedDesc);
+          }
+        }
+
+        if (!languageTouched.current) {
+          const detected = detectLanguage(fetchedTitle + ' ' + fetchedDesc);
+          setLanguage(detected);
         }
       } catch {
         // silent — CORS, offline, etc.
@@ -65,6 +83,7 @@ export function SubmitLinkForm({ onClose, onSubmitted }) {
       description: description.trim() || null,
       neighborhoodId: activeNeighborhoodId.value,
       topicIds: selectedTopics,
+      language,
     });
     setSubmitting(false);
 
@@ -78,18 +97,18 @@ export function SubmitLinkForm({ onClose, onSubmitted }) {
       <div class="submit-form-field">
         <input
           type="url"
-          placeholder="URL"
+          placeholder={t('submit.url')}
           value={url}
           onInput={(e) => setUrl(e.target.value)}
           required
           autofocus
         />
-        {fetching && <span class="url-fetching-hint">Fetching page info...</span>}
+        {fetching && <span class="url-fetching-hint">{t('submit.fetching')}</span>}
       </div>
       <div class="submit-form-field">
         <input
           type="text"
-          placeholder="Title"
+          placeholder={t('submit.title')}
           value={title}
           onInput={(e) => { titleTouched.current = true; setTitle(e.target.value); }}
           required
@@ -97,30 +116,49 @@ export function SubmitLinkForm({ onClose, onSubmitted }) {
       </div>
       <div class="submit-form-field">
         <textarea
-          placeholder="Description (optional)"
+          placeholder={t('submit.description')}
           value={description}
           onInput={(e) => { descTouched.current = true; setDescription(e.target.value); }}
           rows={2}
         />
       </div>
       <div class="submit-form-topics">
-        {topics.value.map((t) => (
+        {topics.value.map((tp) => (
           <button
-            key={t.id}
+            key={tp.id}
             type="button"
-            class={`topic-chip ${selectedTopics.includes(t.id) ? 'active' : ''}`}
-            onClick={() => toggleFormTopic(t.id)}
+            class={`topic-chip ${selectedTopics.includes(tp.id) ? 'active' : ''}`}
+            onClick={() => toggleFormTopic(tp.id)}
           >
-            {t.name}
+            {tp.name}
           </button>
         ))}
       </div>
+      <div class="submit-form-field">
+        <label class="settings-label">{t('submit.language')}</label>
+        <div class="submit-form-topics">
+          <button
+            type="button"
+            class={`topic-chip ${language === 'en' ? 'active' : ''}`}
+            onClick={() => { languageTouched.current = true; setLanguage('en'); }}
+          >
+            English
+          </button>
+          <button
+            type="button"
+            class={`topic-chip ${language === 'sr' ? 'active' : ''}`}
+            onClick={() => { languageTouched.current = true; setLanguage('sr'); }}
+          >
+            Srpski
+          </button>
+        </div>
+      </div>
       <div class="submit-form-actions">
         <button type="button" class="cancel-button" onClick={onClose}>
-          Cancel
+          {t('submit.cancel')}
         </button>
         <button type="submit" class="submit-button" disabled={submitting}>
-          {submitting ? 'Sharing...' : 'Share'}
+          {submitting ? t('submit.sharing') : t('submit.share')}
         </button>
       </div>
     </form>

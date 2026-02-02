@@ -1,5 +1,6 @@
 import { signal, computed } from '@preact/signals';
 import { supabase } from '../lib/supabase';
+import { t } from '../lib/i18n';
 
 export const user = signal(null);
 export const authLoading = signal(true);
@@ -35,9 +36,9 @@ export async function signInWithMagicLink(email) {
   if (error) {
     console.error('Failed to send magic link:', error);
     if (error.status === 429) {
-      return { error: 'Too many attempts. Please wait a few minutes before trying again.' };
+      return { error: t('auth.tooMany') };
     }
-    return { error: 'Failed to send magic link. Please try again.' };
+    return { error: t('auth.failed') };
   }
   return { ok: true };
 }

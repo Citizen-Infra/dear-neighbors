@@ -1,12 +1,13 @@
 import { activeSessions, upcomingSessions, completedSessions, sessionsLoading } from '../store/sessions';
+import { t } from '../lib/i18n';
 import '../styles/sessions.css';
 
 export function SessionsPanel() {
   if (sessionsLoading.value) {
     return (
       <div class="sessions-panel">
-        <h2 class="section-title">Participate</h2>
-        <div class="sessions-empty">Loading sessions...</div>
+        <h2 class="section-title">{t('sessions.title')}</h2>
+        <div class="sessions-empty">{t('sessions.loading')}</div>
       </div>
     );
   }
@@ -18,22 +19,22 @@ export function SessionsPanel() {
 
   return (
     <div class="sessions-panel">
-      <h2 class="section-title">Participate</h2>
+      <h2 class="section-title">{t('sessions.title')}</h2>
 
       {!hasAny ? (
         <div class="sessions-empty">
-          No participation opportunities found for this neighborhood and topics.
+          {t('sessions.empty')}
         </div>
       ) : (
         <>
           {active.length > 0 && (
-            <SessionGroup title="Happening Now" sessions={active} status="active" />
+            <SessionGroup title={t('sessions.happeningNow')} sessions={active} status="active" />
           )}
           {upcoming.length > 0 && (
-            <SessionGroup title="Coming Up" sessions={upcoming} status="upcoming" />
+            <SessionGroup title={t('sessions.comingUp')} sessions={upcoming} status="upcoming" />
           )}
           {completed.length > 0 && (
-            <SessionGroup title="Recently Completed" sessions={completed} status="completed" />
+            <SessionGroup title={t('sessions.recentlyCompleted')} sessions={completed} status="completed" />
           )}
         </>
       )}
@@ -73,7 +74,7 @@ function SessionCard({ session, status }) {
     >
       <div class="session-card-header">
         <span class={`session-status-badge status-${status}`}>
-          {status === 'active' ? 'Live' : status === 'upcoming' ? 'Upcoming' : 'Done'}
+          {status === 'active' ? t('sessions.live') : status === 'upcoming' ? t('sessions.upcoming') : t('sessions.done')}
         </span>
         {timeStr && <span class="session-time">{timeStr}</span>}
       </div>

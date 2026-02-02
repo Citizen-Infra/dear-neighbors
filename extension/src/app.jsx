@@ -5,6 +5,8 @@ import { loadTopics, activeTopicIds, allTopicsActive } from './store/topics';
 import { loadLinks } from './store/links';
 import { loadSessions, showSessions } from './store/sessions';
 import { initTheme } from './store/theme';
+import { uiLanguage, t } from './lib/i18n';
+import { contentLanguageFilter } from './store/language';
 import { TopBar } from './components/TopBar';
 import { LinksFeed } from './components/LinksFeed';
 import { SessionsPanel } from './components/SessionsPanel';
@@ -30,17 +32,18 @@ export function App() {
     if (!ready) return;
     const neighborhoodIds = filterNeighborhoodIds.value;
     const topicIds = allTopicsActive.value ? [] : activeTopicIds.value;
+    const language = contentLanguageFilter.value ? uiLanguage.value : null;
 
     if (neighborhoodIds.length === 0) return;
 
-    loadLinks({ neighborhoodIds, topicIds });
-    loadSessions({ neighborhoodIds, topicIds });
-  }, [ready, filterNeighborhoodIds.value, activeTopicIds.value]);
+    loadLinks({ neighborhoodIds, topicIds, language });
+    loadSessions({ neighborhoodIds, topicIds, language });
+  }, [ready, filterNeighborhoodIds.value, activeTopicIds.value, contentLanguageFilter.value, uiLanguage.value]);
 
   if (!ready) {
     return (
       <div class="loading-screen">
-        <p>Loading...</p>
+        <p>{t('welcome.loading')}</p>
       </div>
     );
   }
@@ -51,8 +54,8 @@ export function App() {
         <TopBar />
         <main class="dashboard dashboard--full">
           <div class="welcome-prompt">
-            <h2>Welcome to Dear Neighbors</h2>
-            <p>Open Settings (gear icon) to pick your country and city to get started.</p>
+            <h2>{t('welcome.title')}</h2>
+            <p>{t('welcome.description')}</p>
           </div>
         </main>
       </div>

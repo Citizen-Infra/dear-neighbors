@@ -3,6 +3,8 @@ import { links, linksLoading, linksHasMore, linksPage, loadLinks, toggleVote, de
 import { filterNeighborhoodIds } from '../store/neighborhoods';
 import { activeTopicIds, allTopicsActive } from '../store/topics';
 import { user, isSignedIn, isAdmin, showAuthModal } from '../store/auth';
+import { uiLanguage, t } from '../lib/i18n';
+import { contentLanguageFilter } from '../store/language';
 import { SubmitLinkForm } from './SubmitLinkForm';
 import '../styles/links.css';
 
@@ -20,6 +22,7 @@ export function LinksFeed() {
       topicIds: allTopicsActive.value ? [] : activeTopicIds.value,
       sort: newSort,
       topRange: newSort === 'top' ? r : undefined,
+      language: contentLanguageFilter.value ? uiLanguage.value : null,
     });
   }
 
@@ -29,6 +32,7 @@ export function LinksFeed() {
       topicIds: allTopicsActive.value ? [] : activeTopicIds.value,
       sort,
       topRange: sort === 'top' ? topRange : undefined,
+      language: contentLanguageFilter.value ? uiLanguage.value : null,
       ...overrides,
     };
   }
@@ -51,31 +55,31 @@ export function LinksFeed() {
   return (
     <div class="links-feed">
       <div class="links-header">
-        <h2 class="section-title">Community Links</h2>
+        <h2 class="section-title">{t('links.title')}</h2>
         <div class="links-controls">
           <div class="sort-tabs">
             <button
               class={`sort-tab ${sort === 'hot' ? 'active' : ''}`}
               onClick={() => handleSort('hot')}
             >
-              Hot
+              {t('links.hot')}
             </button>
             <button
               class={`sort-tab ${sort === 'top' ? 'active' : ''}`}
               onClick={() => handleSort('top')}
             >
-              Top
+              {t('links.top')}
             </button>
             <button
               class={`sort-tab ${sort === 'new' ? 'active' : ''}`}
               onClick={() => handleSort('new')}
             >
-              New
+              {t('links.new')}
             </button>
           </div>
           {sort === 'top' && (
             <div class="top-range-tabs">
-              {[['week', 'Week'], ['year', 'Year'], ['all', 'All']].map(([val, label]) => (
+              {[['week', t('links.week')], ['year', t('links.year')], ['all', t('links.all')]].map(([val, label]) => (
                 <button
                   key={val}
                   class={`top-range-tab ${topRange === val ? 'active' : ''}`}
@@ -92,9 +96,9 @@ export function LinksFeed() {
               if (!isSignedIn.value) { showAuthModal.value = true; return; }
               setShowSubmitForm(!showSubmitForm);
             }}
-            title={isSignedIn.value ? 'Share a link' : 'Sign in to share links'}
+            title={isSignedIn.value ? t('links.share') : t('topbar.signIn')}
           >
-            + Share a link
+            {t('links.share')}
           </button>
         </div>
       </div>
@@ -107,10 +111,10 @@ export function LinksFeed() {
       )}
 
       {linksLoading.value && links.value.length === 0 ? (
-        <div class="links-empty">Loading links...</div>
+        <div class="links-empty">{t('links.loading')}</div>
       ) : links.value.length === 0 ? (
         <div class="links-empty">
-          No links shared yet. Be the first to share something with your neighbors!
+          {t('links.empty')}
         </div>
       ) : (
         <div class="links-list">
@@ -119,7 +123,7 @@ export function LinksFeed() {
           ))}
           {linksHasMore.value && (
             <button class="load-more" onClick={handleLoadMore} disabled={linksLoading.value}>
-              {linksLoading.value ? 'Loading...' : 'Load more'}
+              {linksLoading.value ? t('links.loadingMore') : t('links.loadMore')}
             </button>
           )}
         </div>
@@ -139,7 +143,7 @@ function LinkCard({ link, onVote, onDelete }) {
         <button
           class={`vote-button upvote ${link.user_voted ? 'voted' : ''}`}
           onClick={() => !link.user_voted && onVote(link.id)}
-          title={!isSignedIn.value ? 'Sign in to vote' : link.user_voted ? 'Already voted' : 'Upvote'}
+          title={!isSignedIn.value ? t('topbar.signIn') : link.user_voted ? 'Already voted' : 'Upvote'}
           disabled={link.user_voted}
         >
           &#9650;

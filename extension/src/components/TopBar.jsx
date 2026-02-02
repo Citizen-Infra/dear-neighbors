@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'preact/hooks';
 import { activeNeighborhood, neighborhoods, selectedCityId, selectedCountryId } from '../store/neighborhoods';
 import { activeTopicIds, allTopicsActive } from '../store/topics';
 import { user, isSignedIn, showAuthModal, signOut } from '../store/auth';
+import { t } from '../lib/i18n';
 import { AuthModal } from './AuthModal';
 import { SettingsModal } from './SettingsModal';
 import '../styles/topbar.css';
@@ -25,7 +26,7 @@ export function TopBar() {
   const topicCount = activeTopicIds.value.length;
 
   // Build breadcrumb from hierarchy
-  let neighborhoodLabel = 'Choose location';
+  let neighborhoodLabel = t('topbar.chooseLocation');
   if (neighborhood) {
     const all = neighborhoods.value;
     if (neighborhood.type === 'neighborhood') {
@@ -39,14 +40,14 @@ export function TopBar() {
     }
   }
   const topicLabel = allTopicsActive.value
-    ? 'all topics'
-    : `${topicCount} topic${topicCount !== 1 ? 's' : ''}`;
+    ? t('topbar.allTopics')
+    : t('topbar.topicCount', { count: topicCount, s: topicCount !== 1 ? 's' : '' });
 
   return (
     <header class="topbar">
       <div class="topbar-inner">
         <div class="topbar-brand">
-          <h1 class="topbar-title">Dear Neighbors</h1>
+          <h1 class="topbar-title">{t('topbar.title')}</h1>
         </div>
 
         <button class="topbar-filter-summary" onClick={() => setShowSettings(true)}>
@@ -79,14 +80,14 @@ export function TopBar() {
                 <div class="user-dropdown">
                   <div class="user-email">{user.value.email}</div>
                   <button class="user-dropdown-item" onClick={signOut}>
-                    Sign out
+                    {t('topbar.signOut')}
                   </button>
                 </div>
               )}
             </div>
           ) : (
             <button class="sign-in-button" onClick={() => showAuthModal.value = true}>
-              Sign in
+              {t('topbar.signIn')}
             </button>
           )}
         </div>
