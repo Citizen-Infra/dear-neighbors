@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.1.8] - 2026-02-02
+
+### Changed
+- Move URL metadata fetch to Supabase edge function (server-side)
+- Narrow `host_permissions` from `<all_urls>` to specific domains
+
+### Added
+- Citizen Infra about footer in Settings modal
+- Chrome Web Store listing assets
+
 ## [0.1.7] - 2026-02-02
 
 ### Changed
