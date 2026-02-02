@@ -45,6 +45,12 @@ See [CLAUDE.md](./CLAUDE.md) for detailed architecture notes.
 
 ## Changelog
 
+### [0.1.8] - 2026-02-02
+- Move URL metadata fetch to server-side edge function
+- Narrow `host_permissions` from `<all_urls>` to specific domains
+- Citizen Infra about footer in Settings modal
+- Chrome Web Store listing assets
+
 ### [0.1.7] - 2026-02-02
 - Move auth into Settings modal and add optional sign-in step to onboarding
 - New neighborhood houses icon (replaces plain green square)
