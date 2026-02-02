@@ -43,6 +43,12 @@ See [CLAUDE.md](./CLAUDE.md) for detailed architecture notes.
 
 ## Changelog
 
+### [0.1.7] - 2026-02-02
+- Move auth into Settings modal and add optional sign-in step to onboarding
+- New neighborhood houses icon (replaces plain green square)
+- US AQI scale for non-European countries, European AQI for EU/EEA
+- Flag emojis in language selector
+
 ### [0.1.6] - 2026-02-02
 - Language support: UI i18n (English/Serbian), content language filter, auto-detect from browser locale
 - Onboarding modal for new users to pick city and language on first visit
