@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.6] - 2026-02-02
 
 ### Added
 - Language support: UI i18n (English/Serbian), content language filter, auto-detect from browser locale

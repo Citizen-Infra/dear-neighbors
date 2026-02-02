@@ -43,7 +43,7 @@ See [CLAUDE.md](./CLAUDE.md) for detailed architecture notes.
 
 ## Changelog
 
-### [Unreleased]
+### [0.1.6] - 2026-02-02
 - Language support: UI i18n (English/Serbian), content language filter, auto-detect from browser locale
 - Onboarding modal for new users to pick city and language on first visit
 - Live AQI and UV index badges in the top bar
