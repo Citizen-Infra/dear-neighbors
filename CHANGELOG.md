@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.7] - 2026-02-02
+
+### Changed
+- Use US AQI scale for non-European countries, European AQI for EU/EEA
+- Replace language letter glyphs with flag emojis in language selector
+
 ## [0.1.6] - 2026-02-02
 
 ### Added
