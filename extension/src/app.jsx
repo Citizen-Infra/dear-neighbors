@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'preact/hooks';
+import { signal } from '@preact/signals';
 import { initAuth } from './store/auth';
 import { loadNeighborhoods, filterNeighborhoodIds, locationConfigured } from './store/neighborhoods';
 import { loadTopics, activeTopicIds, allTopicsActive } from './store/topics';
@@ -10,7 +11,10 @@ import { contentLanguageFilter } from './store/language';
 import { TopBar } from './components/TopBar';
 import { LinksFeed } from './components/LinksFeed';
 import { SessionsPanel } from './components/SessionsPanel';
+import { OnboardingModal } from './components/OnboardingModal';
 import './styles/layout.css';
+
+const onboarded = signal(localStorage.getItem('dn_onboarded') === 'true');
 
 export function App() {
   const [ready, setReady] = useState(false);
@@ -45,6 +49,12 @@ export function App() {
       <div class="loading-screen">
         <p>{t('welcome.loading')}</p>
       </div>
+    );
+  }
+
+  if (!locationConfigured.value && !onboarded.value) {
+    return (
+      <OnboardingModal onComplete={() => { onboarded.value = true; }} />
     );
   }
 

@@ -1,0 +1,111 @@
+/* Onboarding overlay — blocks interaction, no dismiss */
+.onboarding-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+}
+
+/* Modal card */
+.onboarding-modal {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl) var(--space-xl) var(--space-lg);
+  width: 420px;
+  max-width: 90vw;
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.18),
+    0 0 0 1px var(--color-border-light);
+  animation: onboarding-enter 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes onboarding-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(16px);
+  }
+}
+
+/* Title & subtitle */
+.onboarding-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--color-text);
+  margin-bottom: var(--space-xs);
+}
+
+.onboarding-subtitle {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-xl);
+  line-height: 1.5;
+}
+
+/* Steps container */
+.onboarding-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* Individual step */
+.onboarding-step {
+  animation: step-reveal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes step-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.onboarding-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.onboarding-step .location-select {
+  margin-bottom: var(--space-md);
+}
+
+.onboarding-step .location-select:last-child {
+  margin-bottom: 0;
+}
+
+.onboarding-step .lang-switch {
+  margin-top: var(--space-xs);
+}
+
+/* CTA button */
+.onboarding-cta {
+  display: block;
+  width: 100%;
+  margin-top: var(--space-xl);
+  padding: 12px var(--space-lg);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  letter-spacing: -0.1px;
+  transition: background 0.15s ease, transform 0.1s ease;
+  animation: step-reveal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.onboarding-cta:hover {
+  background: var(--color-primary-hover);
+}
+
+.onboarding-cta:active {
+  transform: scale(0.98);
+}

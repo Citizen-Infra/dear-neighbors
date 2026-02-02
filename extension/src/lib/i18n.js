@@ -86,6 +86,14 @@ const translations = {
     'auth.tooMany': 'Too many attempts. Please wait a few minutes before trying again.',
     'auth.failed': 'Failed to send magic link. Please try again.',
 
+    // Onboarding
+    'onboarding.welcome': 'Welcome to Dear Neighbors',
+    'onboarding.subtitle': 'Pick your city and language to get started',
+    'onboarding.selectCountry': 'Select your country',
+    'onboarding.selectCity': 'Select your city',
+    'onboarding.languageStep': 'Choose your language',
+    'onboarding.getStarted': 'Get Started',
+
     // Welcome
     'welcome.title': 'Welcome to Dear Neighbors',
     'welcome.description': 'Open Settings (gear icon) to pick your country and city to get started.',
@@ -194,6 +202,14 @@ const translations = {
     'auth.close': 'Zatvori',
     'auth.tooMany': 'Previše pokušaja. Sačekajte nekoliko minuta pre nego što pokušate ponovo.',
     'auth.failed': 'Slanje magičnog linka nije uspelo. Pokušajte ponovo.',
+
+    // Onboarding
+    'onboarding.welcome': 'Dobrodošli na Dragi susedi',
+    'onboarding.subtitle': 'Izaberite grad i jezik da započnete',
+    'onboarding.selectCountry': 'Izaberite državu',
+    'onboarding.selectCity': 'Izaberite grad',
+    'onboarding.languageStep': 'Izaberite jezik',
+    'onboarding.getStarted': 'Započni',
 
     // Welcome
     'welcome.title': 'Dobrodošli na Dragi susedi',

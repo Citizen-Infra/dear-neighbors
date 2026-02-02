@@ -100,18 +100,6 @@ export async function loadNeighborhoods() {
     }
     return;
   }
-
-  // Default: if nothing is configured and data exists, pick first country/city
-  if (!selectedCountryId.value && !selectedCityId.value && !activeNeighborhoodId.value && data.length > 0) {
-    const country = data.find((n) => n.type === 'country');
-    if (country) {
-      setSelectedCountry(country.id);
-      const city = data.find((n) => n.type === 'city' && n.parent_id === country.id);
-      if (city) {
-        setSelectedCity(city.id);
-      }
-    }
-  }
 }
 
 export function setSelectedCountry(id) {
