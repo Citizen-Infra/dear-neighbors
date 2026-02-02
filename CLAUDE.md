@@ -36,9 +36,17 @@ Bump version in both `extension/public/manifest.json` and `extension/package.jso
 
 SVG source at `extension/public/icons/icon.svg`. Generate PNGs: `npx sharp-cli -i icon.svg -o icon-{size}.png resize {size} {size}` for 16, 48, 128.
 
+### Edge Functions
+
+`fetch-url-metadata` — server-side URL metadata extraction (title, description) used by SubmitLinkForm. Deployed via `mcp__supabase__deploy_edge_function`. No JWT required (anon key sufficient).
+
 ### Migrations
 
 SQL migrations in `api/migrations/` applied via MCP tool (`mcp__supabase__apply_migration`, project `eeidclmhfkndimghdyuq`).
+
+### CWS Assets
+
+`cws/` — Chrome Web Store listing materials: `listing.md` (description, privacy declaration), promo images (440x280 + 1400x560 in SVG/PNG), `screenshots.md` (capture guide).
 
 ## Architecture
 
@@ -74,6 +82,8 @@ Signals-based stores in `src/store/`:
 - `links.js` — community links with pagination, voting, hot-ranking. Queries use `.in('neighborhood_id', ids)` for multi-neighborhood filtering.
 - `sessions.js` — participation opportunities grouped by status (active/upcoming/completed). Same `.in()` pattern.
 - `auth.js` — Supabase auth state (magic link sign-in), `isAdmin` signal checked against `admins` table. `showAuthModal` signal is watched by TopBar; when set to true (e.g. by vote/share buttons), it opens the SettingsModal which contains the inline auth form.
+- `environment.js` — AQI and UV index from Open-Meteo APIs, displayed as badges in TopBar
+- `language.js` — `contentLanguageFilter` signal, filters link content by interface language
 - `theme.js` — light/dark/system theme
 
 ### Database
