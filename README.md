@@ -104,4 +104,4 @@ See [CLAUDE.md](./CLAUDE.md) for detailed architecture notes.
 
 ## License
 
-Private — Citizen Infrastructure / NSRT
+[AGPL-3.0](LICENSE)
