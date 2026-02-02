@@ -8,8 +8,6 @@ Chrome extension that replaces the new tab page with a neighborhood dashboard. C
 
 Part of the [NSRT](https://github.com/Citizen-Infra/nsrt) (Novi Sad Relational Tech) citizen infrastructure ecosystem.
 
-<img width="2520" height="1584" alt="Dear Neighbors screenshot" src="https://github.com/user-attachments/assets/dc56cc56-bbcb-4496-9831-5c41b8c8551d" />
-
 ## How it works
 
 - **Pick your location** — Country → City → Neighborhood (or "all neighborhoods")
@@ -17,6 +15,8 @@ Part of the [NSRT](https://github.com/Citizen-Infra/nsrt) (Novi Sad Relational T
 - **Share links** — Submit relevant local news, events, and resources via the new tab page or browser popup
 - **Vote** — Upvote links that matter to your neighborhood
 - **Participate** — See live, upcoming, and completed participation opportunities (Harmonica sessions, Polis conversations, etc.)
+
+<img width="2520" height="1680" alt="Dear Neighbors screenshot" src="https://github.com/user-attachments/assets/a93cc4c4-77af-4606-ad1f-04651cbe37c9" />
 
 ## Setup
 
