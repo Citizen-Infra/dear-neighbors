@@ -30,6 +30,8 @@ Bump version in both `extension/public/manifest.json` and `extension/package.jso
 ./scripts/package-zip.sh --skip-build  # Use existing dist/
 ```
 
+**Two distribution channels:** GitHub releases can be frequent (every commit batch). Chrome Web Store uploads are cumulative — upload when there's a meaningful set of changes. CWS listing assets are in `cws/`. CWS auto-updates for users; manifest version must increase with each upload.
+
 ### Icons
 
 SVG source at `extension/public/icons/icon.svg`. Generate PNGs: `npx sharp-cli -i icon.svg -o icon-{size}.png resize {size} {size}` for 16, 48, 128.
