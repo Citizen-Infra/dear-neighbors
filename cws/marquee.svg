@@ -1,78 +1,192 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1400" height="560" viewBox="0 0 1400 560">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#358560"/>
-      <stop offset="100%" stop-color="#1e4d35"/>
+    <!-- Sky gradient: deep green twilight -->
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f2e1e"/>
+      <stop offset="45%" stop-color="#1a4e34"/>
+      <stop offset="80%" stop-color="#2a7a50"/>
+      <stop offset="100%" stop-color="#358560"/>
     </linearGradient>
-    <linearGradient id="roof1" x1="0.5" y1="0" x2="0.5" y2="1">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.85"/>
+
+    <!-- Horizon warm glow -->
+    <radialGradient id="horizonGlow" cx="0.5" cy="1" r="0.6" fx="0.5" fy="0.95">
+      <stop offset="0%" stop-color="#e07a3a" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#e07a3a" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Ground -->
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a4e34"/>
+      <stop offset="100%" stop-color="#0f2e1e"/>
     </linearGradient>
-    <linearGradient id="roof2" x1="0.5" y1="0" x2="0.5" y2="1">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.45"/>
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.3"/>
+
+    <!-- Window glow -->
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.9"/>
+      <stop offset="55%" stop-color="#f59e0b" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Door glow (spills onto ground) -->
+    <radialGradient id="doorGlow" cx="0.5" cy="0.3" r="0.7">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.85"/>
+      <stop offset="50%" stop-color="#f59e0b" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#e07a3a" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- House depth layers -->
+    <linearGradient id="houseFront" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8e4dd"/>
+      <stop offset="100%" stop-color="#d4cfc6"/>
     </linearGradient>
-    <linearGradient id="roof3" x1="0.5" y1="0" x2="0.5" y2="1">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.7"/>
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.55"/>
+    <linearGradient id="houseMid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#b8c4b0"/>
+      <stop offset="100%" stop-color="#9aab90"/>
     </linearGradient>
-    <linearGradient id="window" x1="0.5" y1="0" x2="0.5" y2="1">
-      <stop offset="0%" stop-color="#fbbf24"/>
-      <stop offset="100%" stop-color="#f59e0b"/>
+    <linearGradient id="houseFar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6d9065"/>
+      <stop offset="100%" stop-color="#5a7d55"/>
     </linearGradient>
+    <linearGradient id="houseGhost" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4a6e44"/>
+      <stop offset="100%" stop-color="#3d5f3a"/>
+    </linearGradient>
+
+    <!-- Noise texture -->
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feBlend in="SourceGraphic" mode="multiply"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.05"/>
+      </feComponentTransfer>
+      <feComposite in2="SourceGraphic" operator="in"/>
+    </filter>
+
+    <!-- Soft text shadow -->
+    <filter id="textShadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
   </defs>
 
-  <!-- Background -->
-  <rect width="1400" height="560" fill="url(#bg)"/>
+  <!-- Sky -->
+  <rect width="1400" height="560" fill="url(#sky)"/>
 
-  <!-- Ground -->
-  <rect x="0" y="410" width="1400" height="150" fill="rgba(0,0,0,0.1)"/>
+  <!-- Warm horizon glow -->
+  <rect width="1400" height="560" fill="url(#horizonGlow)"/>
 
-  <!-- Far-left house (small, background) -->
-  <path d="M80 370 L130 310 L180 370 L180 410 L80 410 Z" fill="url(#roof2)"/>
-  <rect x="110" y="365" width="14" height="14" rx="2" fill="url(#window)" opacity="0.4"/>
+  <!-- Stars scattered across sky -->
+  <circle cx="80" cy="40" r="1.5" fill="white" opacity="0.7"/>
+  <circle cx="190" cy="70" r="1" fill="white" opacity="0.5"/>
+  <circle cx="310" cy="30" r="1.8" fill="white" opacity="0.6"/>
+  <circle cx="450" cy="60" r="1.2" fill="white" opacity="0.45"/>
+  <circle cx="560" cy="25" r="1.4" fill="white" opacity="0.55"/>
+  <circle cx="680" cy="50" r="1" fill="white" opacity="0.4"/>
+  <circle cx="780" cy="35" r="1.6" fill="white" opacity="0.65"/>
+  <circle cx="900" cy="55" r="1.1" fill="white" opacity="0.5"/>
+  <circle cx="1020" cy="28" r="1.3" fill="white" opacity="0.6"/>
+  <circle cx="1140" cy="65" r="0.9" fill="white" opacity="0.45"/>
+  <circle cx="1250" cy="38" r="1.5" fill="white" opacity="0.55"/>
+  <circle cx="1350" cy="72" r="1" fill="white" opacity="0.4"/>
+  <circle cx="140" cy="95" r="0.8" fill="white" opacity="0.35"/>
+  <circle cx="620" cy="80" r="1.2" fill="white" opacity="0.4"/>
+  <circle cx="1080" cy="85" r="0.7" fill="white" opacity="0.3"/>
+  <circle cx="240" cy="110" r="0.9" fill="white" opacity="0.3"/>
+  <circle cx="850" cy="90" r="1.1" fill="white" opacity="0.35"/>
+  <circle cx="1300" cy="45" r="1.3" fill="white" opacity="0.5"/>
 
-  <!-- Left house (medium) -->
-  <path d="M160 360 L230 280 L300 360 L300 410 L160 410 Z" fill="url(#roof3)"/>
-  <rect x="210" y="352" width="18" height="30" rx="2" fill="url(#window)" opacity="0.7"/>
-  <rect x="180" y="348" width="14" height="14" rx="2" fill="url(#window)" opacity="0.6"/>
-  <rect x="270" y="320" width="10" height="28" rx="2" fill="rgba(255,255,255,0.5)"/>
+  <!-- Ground plane -->
+  <rect x="0" y="390" width="1400" height="170" fill="url(#ground)"/>
+  <rect x="0" y="383" width="1400" height="16" fill="url(#ground)" opacity="0.5"/>
 
-  <!-- Center house (large, front) -->
-  <path d="M270 340 L370 230 L470 340 L470 410 L270 410 Z" fill="url(#roof1)"/>
-  <rect x="345" y="340" width="24" height="42" rx="3" fill="url(#window)"/>
-  <rect x="300" y="335" width="18" height="18" rx="2" fill="url(#window)" opacity="0.8"/>
-  <rect x="430" y="258" width="14" height="38" rx="2" fill="rgba(255,255,255,0.6)"/>
+  <!-- ====== LEFT NEIGHBORHOOD ====== -->
 
-  <!-- Right house (medium) -->
-  <path d="M440 365 L500 300 L560 365 L560 410 L440 410 Z" fill="url(#roof3)"/>
-  <rect x="480" y="358" width="16" height="26" rx="2" fill="url(#window)" opacity="0.7"/>
+  <!-- Ghost house (far left, barely visible) -->
+  <path d="M-10 390 L25 355 L60 390 L60 430 L-10 430 Z" fill="url(#houseGhost)" opacity="0.5"/>
+  <rect x="15" y="385" width="8" height="8" rx="1" fill="url(#glow)" opacity="0.25"/>
 
-  <!-- Center text block -->
-  <text x="700" y="220" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="64" font-weight="700" fill="#ffffff" text-anchor="middle">Dear Neighbors</text>
-  <text x="700" y="280" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="24" font-weight="400" fill="rgba(255,255,255,0.8)" text-anchor="middle">Your neighborhood new tab page</text>
+  <!-- Far house left -->
+  <path d="M45 390 L85 348 L125 390 L125 430 L45 430 Z" fill="url(#houseFar)" opacity="0.75"/>
+  <rect x="70" y="382" width="10" height="10" rx="1.5" fill="url(#glow)" opacity="0.45"/>
+  <rect x="95" y="382" width="10" height="10" rx="1.5" fill="url(#glow)" opacity="0.35"/>
 
-  <!-- Feature pills -->
-  <rect x="440" y="320" width="160" height="36" rx="18" fill="rgba(255,255,255,0.15)"/>
-  <text x="520" y="343" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.85)" text-anchor="middle">Community Links</text>
+  <!-- Mid house left -->
+  <path d="M105 390 L155 330 L205 390 L205 430 L105 430 Z" fill="url(#houseMid)" opacity="0.9"/>
+  <rect x="135" y="380" width="12" height="12" rx="2" fill="#f5c842" opacity="0.7"/>
+  <ellipse cx="141" cy="385" rx="14" ry="11" fill="url(#glow)" opacity="0.3"/>
+  <rect x="165" y="380" width="12" height="12" rx="2" fill="#f5c842" opacity="0.6"/>
+  <!-- Chimney -->
+  <rect x="185" y="345" width="8" height="30" rx="1.5" fill="url(#houseMid)" opacity="0.7"/>
 
-  <rect x="620" y="320" width="160" height="36" rx="18" fill="rgba(255,255,255,0.15)"/>
-  <text x="700" y="343" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.85)" text-anchor="middle">Local News</text>
+  <!-- Front house left (prominent) -->
+  <path d="M175 385 L250 300 L325 385 L325 430 L175 430 Z" fill="url(#houseFront)"/>
+  <!-- Door with light spill -->
+  <ellipse cx="255" cy="428" rx="22" ry="12" fill="url(#doorGlow)"/>
+  <rect x="244" y="395" width="20" height="35" rx="3" fill="#f5c842"/>
+  <rect x="244" y="395" width="20" height="35" rx="3" fill="url(#doorGlow)"/>
+  <!-- Windows -->
+  <ellipse cx="215" cy="372" rx="16" ry="13" fill="url(#glow)" opacity="0.35"/>
+  <rect x="207" y="365" width="16" height="16" rx="2.5" fill="#f5c842" opacity="0.85"/>
+  <ellipse cx="290" cy="372" rx="16" ry="13" fill="url(#glow)" opacity="0.3"/>
+  <rect x="282" y="365" width="16" height="16" rx="2.5" fill="#f5c842" opacity="0.75"/>
 
-  <rect x="800" y="320" width="160" height="36" rx="18" fill="rgba(255,255,255,0.15)"/>
-  <text x="880" y="343" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.85)" text-anchor="middle">Participation</text>
+  <!-- Small house bridging left to center -->
+  <path d="M310 390 L345 362 L380 390 L380 430 L310 430 Z" fill="url(#houseMid)" opacity="0.75"/>
+  <rect x="335" y="384" width="10" height="10" rx="1.5" fill="url(#glow)" opacity="0.5"/>
 
-  <!-- Right-side decorative houses -->
-  <path d="M900 370 L950 310 L1000 370 L1000 410 L900 410 Z" fill="url(#roof2)"/>
-  <rect x="930" y="365" width="14" height="14" rx="2" fill="url(#window)" opacity="0.4"/>
+  <!-- ====== CENTER TEXT ====== -->
 
-  <path d="M980 355 L1050 270 L1120 355 L1120 410 L980 410 Z" fill="url(#roof3)"/>
-  <rect x="1030" y="348" width="18" height="30" rx="2" fill="url(#window)" opacity="0.7"/>
-  <rect x="1000" y="344" width="14" height="14" rx="2" fill="url(#window)" opacity="0.5"/>
+  <text x="700" y="210" font-family="Georgia, 'Times New Roman', serif" font-size="80" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="2" filter="url(#textShadow)">Dear Neighbors</text>
 
-  <path d="M1120 375 L1160 330 L1200 375 L1200 410 L1120 410 Z" fill="url(#roof2)"/>
-  <rect x="1145" y="370" width="12" height="12" rx="2" fill="url(#window)" opacity="0.4"/>
+  <!-- Divider -->
+  <line x1="540" y1="235" x2="860" y2="235" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
 
-  <path d="M1220 365 L1280 295 L1340 365 L1340 410 L1220 410 Z" fill="url(#roof3)"/>
-  <rect x="1260" y="355" width="16" height="28" rx="2" fill="url(#window)" opacity="0.6"/>
+  <text x="700" y="272" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="rgba(255,255,255,0.6)" text-anchor="middle" letter-spacing="4">YOUR NEIGHBORHOOD NEW TAB PAGE</text>
+
+  <!-- Feature pills with warm accent borders -->
+  <rect x="430" y="310" width="155" height="38" rx="19" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="507" y="334" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="500" fill="rgba(255,255,255,0.7)" text-anchor="middle" letter-spacing="0.5">Community Links</text>
+
+  <rect x="605" y="310" width="120" height="38" rx="19" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="665" y="334" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="500" fill="rgba(255,255,255,0.7)" text-anchor="middle" letter-spacing="0.5">Local News</text>
+
+  <rect x="745" y="310" width="155" height="38" rx="19" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="822" y="334" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="500" fill="rgba(255,255,255,0.7)" text-anchor="middle" letter-spacing="0.5">Participation</text>
+
+  <!-- ====== RIGHT NEIGHBORHOOD ====== -->
+
+  <!-- Small house bridging center to right -->
+  <path d="M1020 390 L1050 365 L1080 390 L1080 430 L1020 430 Z" fill="url(#houseMid)" opacity="0.7"/>
+  <rect x="1040" y="385" width="9" height="9" rx="1.5" fill="url(#glow)" opacity="0.45"/>
+
+  <!-- Front house right (prominent) -->
+  <path d="M1060 385 L1140 295 L1220 385 L1220 430 L1060 430 Z" fill="url(#houseFront)"/>
+  <!-- Door -->
+  <ellipse cx="1143" cy="428" rx="20" ry="11" fill="url(#doorGlow)"/>
+  <rect x="1133" y="398" width="18" height="32" rx="2.5" fill="#f5c842"/>
+  <rect x="1133" y="398" width="18" height="32" rx="2.5" fill="url(#doorGlow)"/>
+  <!-- Windows -->
+  <ellipse cx="1100" cy="372" rx="14" ry="12" fill="url(#glow)" opacity="0.3"/>
+  <rect x="1093" y="366" width="14" height="14" rx="2" fill="#f5c842" opacity="0.8"/>
+  <ellipse cx="1185" cy="372" rx="14" ry="12" fill="url(#glow)" opacity="0.25"/>
+  <rect x="1178" y="366" width="14" height="14" rx="2" fill="#f5c842" opacity="0.7"/>
+
+  <!-- Mid house right -->
+  <path d="M1200 390 L1245 340 L1290 390 L1290 430 L1200 430 Z" fill="url(#houseMid)" opacity="0.85"/>
+  <rect x="1228" y="382" width="11" height="11" rx="1.5" fill="#f5c842" opacity="0.65"/>
+  <ellipse cx="1233" cy="387" rx="12" ry="10" fill="url(#glow)" opacity="0.25"/>
+  <rect x="1258" y="382" width="11" height="11" rx="1.5" fill="#f5c842" opacity="0.55"/>
+  <!-- Chimney -->
+  <rect x="1272" y="352" width="7" height="26" rx="1.5" fill="url(#houseMid)" opacity="0.65"/>
+
+  <!-- Far house right -->
+  <path d="M1280 390 L1315 355 L1350 390 L1350 430 L1280 430 Z" fill="url(#houseFar)" opacity="0.7"/>
+  <rect x="1303" y="384" width="9" height="9" rx="1" fill="url(#glow)" opacity="0.4"/>
+
+  <!-- Ghost house (far right edge) -->
+  <path d="M1340 390 L1375 360 L1410 390 L1410 430 L1340 430 Z" fill="url(#houseGhost)" opacity="0.45"/>
+  <rect x="1360" y="386" width="7" height="7" rx="1" fill="url(#glow)" opacity="0.2"/>
+
+  <!-- Noise overlay -->
+  <rect width="1400" height="560" filter="url(#noise)" fill="white" opacity="0.25"/>
 </svg>
