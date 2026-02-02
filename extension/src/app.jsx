@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'preact/hooks';
 import { signal } from '@preact/signals';
 import { initAuth } from './store/auth';
-import { loadNeighborhoods, filterNeighborhoodIds, locationConfigured } from './store/neighborhoods';
+import { loadNeighborhoods, filterNeighborhoodIds, locationConfigured, neighborhoods, selectedCityId, selectedCountryId } from './store/neighborhoods';
 import { loadTopics, activeTopicIds, allTopicsActive } from './store/topics';
+import { loadEnvironmentData } from './store/environment';
 import { loadLinks } from './store/links';
 import { loadSessions, showSessions } from './store/sessions';
 import { initTheme } from './store/theme';
@@ -42,6 +43,14 @@ export function App() {
 
     loadLinks({ neighborhoodIds, topicIds, language });
     loadSessions({ neighborhoodIds, topicIds, language });
+
+    // Load AQI/UV for the selected city
+    const all = neighborhoods.value;
+    const city = all.find((n) => n.id === selectedCityId.value);
+    const country = all.find((n) => n.id === selectedCountryId.value);
+    if (city && country) {
+      loadEnvironmentData(city.name, country.name);
+    }
   }, [ready, filterNeighborhoodIds.value, activeTopicIds.value, contentLanguageFilter.value, uiLanguage.value]);
 
   if (!ready) {

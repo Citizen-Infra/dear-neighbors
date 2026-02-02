@@ -1,0 +1,52 @@
+.env-badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.env-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 100px;
+  background: var(--color-surface-hover);
+  font-size: 11px;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.env-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.env-label {
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.env-value {
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+/* Color tokens */
+:root {
+  --env-green: #40c057;
+  --env-yellow: #fab005;
+  --env-orange: #fd7e14;
+  --env-red: #fa5252;
+}
+
+[data-theme="dark"] {
+  --env-green: #51cf66;
+  --env-yellow: #fcc419;
+  --env-orange: #ff922b;
+  --env-red: #ff6b6b;
+}

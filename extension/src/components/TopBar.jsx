@@ -5,6 +5,7 @@ import { user, isSignedIn, showAuthModal, signOut } from '../store/auth';
 import { t } from '../lib/i18n';
 import { AuthModal } from './AuthModal';
 import { SettingsModal } from './SettingsModal';
+import { EnvBadges } from './EnvBadges';
 import '../styles/topbar.css';
 
 export function TopBar() {
@@ -57,6 +58,7 @@ export function TopBar() {
         </button>
 
         <div class="topbar-actions">
+          <EnvBadges />
           <button
             class="topbar-gear"
             onClick={() => setShowSettings(true)}

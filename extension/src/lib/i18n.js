@@ -124,6 +124,20 @@ const translations = {
     'popup.sending': 'Sending...',
     'popup.checkEmail': 'Check your email for a magic link!',
     'popup.spamHint': 'Not seeing it? Check your spam folder.',
+
+    // Environment badges
+    'env.aqi': 'AQI',
+    'env.uv': 'UV',
+    'env.aqi.good': 'Good',
+    'env.aqi.fair': 'Fair',
+    'env.aqi.moderate': 'Moderate',
+    'env.aqi.poor': 'Poor',
+    'env.aqi.veryPoor': 'Very poor',
+    'env.uv.low': 'Low',
+    'env.uv.moderate': 'Moderate',
+    'env.uv.high': 'High',
+    'env.uv.veryHigh': 'Very high',
+    'env.uv.extreme': 'Extreme',
   },
   sr: {
     // TopBar
@@ -241,6 +255,20 @@ const translations = {
     'popup.sending': 'Slanje...',
     'popup.checkEmail': 'Proverite email za magični link!',
     'popup.spamHint': 'Ne vidite? Proverite spam folder.',
+
+    // Environment badges
+    'env.aqi': 'AQI',
+    'env.uv': 'UV',
+    'env.aqi.good': 'Dobar',
+    'env.aqi.fair': 'Prihvatljiv',
+    'env.aqi.moderate': 'Umeren',
+    'env.aqi.poor': 'Loš',
+    'env.aqi.veryPoor': 'Veoma loš',
+    'env.uv.low': 'Nizak',
+    'env.uv.moderate': 'Umeren',
+    'env.uv.high': 'Visok',
+    'env.uv.veryHigh': 'Veoma visok',
+    'env.uv.extreme': 'Ekstremno',
   },
 };
 
