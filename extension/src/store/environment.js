@@ -2,9 +2,24 @@ import { signal } from '@preact/signals';
 
 export const cityAqi = signal(null);
 export const cityUv = signal(null);
+export const aqiScale = signal('eu'); // 'eu' or 'us'
 export const envLoading = signal(false);
 
 const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
+
+// EU + EEA + closely aligned European countries that use European AQI
+const EU_COUNTRIES = new Set([
+  'Austria', 'Belgium', 'Bulgaria', 'Croatia', 'Cyprus', 'Czech Republic',
+  'Denmark', 'Estonia', 'Finland', 'France', 'Germany', 'Greece', 'Hungary',
+  'Ireland', 'Italy', 'Latvia', 'Lithuania', 'Luxembourg', 'Malta',
+  'Netherlands', 'Poland', 'Portugal', 'Romania', 'Slovakia', 'Slovenia',
+  'Spain', 'Sweden',
+  // EEA
+  'Norway', 'Iceland', 'Liechtenstein',
+  // Non-EU but use EAQI
+  'Switzerland', 'United Kingdom', 'Serbia', 'Montenegro', 'Bosnia and Herzegovina',
+  'North Macedonia', 'Albania', 'Moldova', 'Ukraine', 'Turkey',
+]);
 
 function cityKey(cityName, countryName) {
   return `${cityName}_${countryName}`.toLowerCase().replace(/\s+/g, '_');
@@ -36,15 +51,16 @@ async function geocodeCity(cityName, countryName) {
   }
 }
 
-async function fetchAirQuality(lat, lon) {
+async function fetchAirQuality(lat, lon, useEu) {
   try {
-    const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=european_aqi,uv_index`;
+    const aqiField = useEu ? 'european_aqi' : 'us_aqi';
+    const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=${aqiField},uv_index`;
     const res = await fetch(url);
     if (!res.ok) return null;
     const data = await res.json();
     if (!data.current) return null;
     return {
-      aqi: data.current.european_aqi ?? null,
+      aqi: data.current[aqiField] ?? null,
       uv: data.current.uv_index ?? null,
     };
   } catch (e) {
@@ -65,6 +81,7 @@ export async function loadEnvironmentData(cityName, countryName) {
     const parsed = JSON.parse(cached);
     cityAqi.value = parsed.aqi;
     cityUv.value = parsed.uv;
+    aqiScale.value = parsed.scale || 'eu';
     if (Date.now() - parsed.timestamp < CACHE_TTL) return;
   }
 
@@ -76,7 +93,10 @@ export async function loadEnvironmentData(cityName, countryName) {
     return;
   }
 
-  const result = await fetchAirQuality(coords.latitude, coords.longitude);
+  const useEu = EU_COUNTRIES.has(countryName);
+  aqiScale.value = useEu ? 'eu' : 'us';
+
+  const result = await fetchAirQuality(coords.latitude, coords.longitude, useEu);
   envLoading.value = false;
 
   if (result) {
@@ -85,6 +105,7 @@ export async function loadEnvironmentData(cityName, countryName) {
     localStorage.setItem(cacheKey, JSON.stringify({
       aqi: result.aqi,
       uv: result.uv,
+      scale: useEu ? 'eu' : 'us',
       timestamp: Date.now(),
     }));
   }
