@@ -31,70 +31,82 @@ export function OnboardingModal({ onComplete }) {
   return (
     <div class="onboarding-overlay">
       <div class="onboarding-modal">
-        <h2 class="onboarding-title">{t('onboarding.welcome')}</h2>
-        <p class="onboarding-subtitle">{t('onboarding.subtitle')}</p>
-
-        <div class="onboarding-steps">
-          {/* Step 1: Location */}
-          <section class={`onboarding-step ${step >= 1 ? 'active' : ''}`}>
-            <label class="onboarding-label">{t('onboarding.selectCountry')}</label>
-            <select
-              class="location-select"
-              value={selectedCountryId.value || ''}
-              onChange={handleCountryChange}
-            >
-              <option value="">{t('settings.selectCountry')}</option>
-              {countries.value.map((c) => (
-                <option key={c.id} value={c.id}>{c.name}</option>
-              ))}
-            </select>
-
-            {countrySelected && (
-              <>
-                <label class="onboarding-label">{t('onboarding.selectCity')}</label>
-                <select
-                  class="location-select"
-                  value={selectedCityId.value || ''}
-                  onChange={handleCityChange}
-                >
-                  <option value="">{t('settings.selectCity')}</option>
-                  {citiesForCountry.value.map((c) => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
-                  ))}
-                </select>
-              </>
-            )}
-          </section>
-
-          {/* Step 2: Language */}
-          {step >= 2 && citySelected && (
-            <section class="onboarding-step active">
-              <label class="onboarding-label">{t('onboarding.languageStep')}</label>
-              <div class="lang-switch">
-                <button
-                  class={`lang-switch-option ${uiLanguage.value === 'en' ? 'active' : ''}`}
-                  onClick={() => setUiLanguage('en')}
-                >
-                  <span class="lang-glyph">A</span>
-                  English
-                </button>
-                <button
-                  class={`lang-switch-option ${uiLanguage.value === 'sr' ? 'active' : ''}`}
-                  onClick={() => setUiLanguage('sr')}
-                >
-                  <span class="lang-glyph">{'\u0416'}</span>
-                  Srpski
-                </button>
-              </div>
-            </section>
-          )}
+        <div class="onboarding-header">
+          <h2 class="onboarding-title">{t('onboarding.welcome')}</h2>
+          <p class="onboarding-subtitle">{t('onboarding.subtitle')}</p>
         </div>
 
-        {step >= 2 && citySelected && (
-          <button class="onboarding-cta" onClick={handleFinish}>
-            {t('onboarding.getStarted')}
-          </button>
-        )}
+        <div class="onboarding-progress">
+          <span class={`onboarding-dot ${step >= 2 ? 'done' : 'active'}`} />
+          <span class="onboarding-line">
+            <span class={`onboarding-line-fill ${step >= 2 ? 'filled' : ''}`} />
+          </span>
+          <span class={`onboarding-dot ${step >= 2 ? 'active' : ''}`} />
+        </div>
+
+        <div class="onboarding-body">
+          <div class="onboarding-steps">
+            {/* Step 1: Location */}
+            <section class="onboarding-step">
+              <label class="onboarding-label">{t('onboarding.selectCountry')}</label>
+              <select
+                class="location-select"
+                value={selectedCountryId.value || ''}
+                onChange={handleCountryChange}
+              >
+                <option value="">{t('settings.selectCountry')}</option>
+                {countries.value.map((c) => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
+
+              {countrySelected && (
+                <>
+                  <label class="onboarding-label">{t('onboarding.selectCity')}</label>
+                  <select
+                    class="location-select"
+                    value={selectedCityId.value || ''}
+                    onChange={handleCityChange}
+                  >
+                    <option value="">{t('settings.selectCity')}</option>
+                    {citiesForCountry.value.map((c) => (
+                      <option key={c.id} value={c.id}>{c.name}</option>
+                    ))}
+                  </select>
+                </>
+              )}
+            </section>
+
+            {/* Step 2: Language */}
+            {step >= 2 && citySelected && (
+              <section class="onboarding-step">
+                <label class="onboarding-label">{t('onboarding.languageStep')}</label>
+                <div class="lang-switch">
+                  <button
+                    class={`lang-switch-option ${uiLanguage.value === 'en' ? 'active' : ''}`}
+                    onClick={() => setUiLanguage('en')}
+                  >
+                    <span class="lang-glyph">A</span>
+                    English
+                  </button>
+                  <button
+                    class={`lang-switch-option ${uiLanguage.value === 'sr' ? 'active' : ''}`}
+                    onClick={() => setUiLanguage('sr')}
+                  >
+                    <span class="lang-glyph">{'\u0416'}</span>
+                    Srpski
+                  </button>
+                </div>
+              </section>
+            )}
+          </div>
+
+          {step >= 2 && citySelected && (
+            <button class="onboarding-cta" onClick={handleFinish}>
+              {t('onboarding.getStarted')}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
