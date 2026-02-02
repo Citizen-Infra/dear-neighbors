@@ -63,7 +63,7 @@ Signals-based stores in `src/store/`:
 - `topics.js` — interest categories, multi-select filter persisted to localStorage
 - `links.js` — community links with pagination, voting, hot-ranking. Queries use `.in('neighborhood_id', ids)` for multi-neighborhood filtering.
 - `sessions.js` — participation opportunities grouped by status (active/upcoming/completed). Same `.in()` pattern.
-- `auth.js` — Supabase auth state (magic link sign-in), `isAdmin` signal checked against `admins` table. `showAuthModal` signal allows any component to trigger the sign-in modal (used by vote/share buttons when not signed in).
+- `auth.js` — Supabase auth state (magic link sign-in), `isAdmin` signal checked against `admins` table. `showAuthModal` signal is watched by TopBar; when set to true (e.g. by vote/share buttons), it opens the SettingsModal which contains the inline auth form.
 - `theme.js` — light/dark/system theme
 
 ### Database
@@ -79,8 +79,9 @@ Supabase Postgres with RLS. Schema in `api/migrations/`:
 
 ### UI layout
 
-- **Top bar:** Branding, breadcrumb location label (e.g. "Novi Sad / Liman"), topic count, settings gear, auth
-- **Settings modal:** Cascading Country → City → Neighborhood selection, topic chips, theme picker, participation toggle
+- **Top bar:** Branding, breadcrumb location label (e.g. "Novi Sad / Liman"), topic count, settings gear
+- **Settings modal:** Account (inline auth form or signed-in state), cascading Country → City → Neighborhood selection, topic chips, theme picker, participation toggle
+- **Onboarding modal:** 3-step wizard for new users — Location → Language → Account (optional sign-in)
 - **Left column (~60%):** Community links feed (Hot/Top/New sort, voting with upvote/unvote arrows, submit form). Top sort has Week/Year/All time range picker.
 - **Right column (~40%):** Participation opportunities panel (live/upcoming/completed)
 - **Welcome state:** When no location configured, shows prompt to open settings
@@ -90,7 +91,7 @@ Supabase Postgres with RLS. Schema in `api/migrations/`:
 - `base: ''` in vite.config.js — Chrome extensions need relative paths
 - Supabase env vars `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` must be set at build time — Vite inlines them. Locally via `.env.local`, in CI via GitHub Actions secrets. Without them the extension shows a white page (`supabaseUrl is required`)
 - `host_permissions: ["<all_urls>"]` in manifest.json — required for SubmitLinkForm's cross-origin URL metadata fetch
-- Anonymous users can browse; sign-in (magic link) required to submit/vote. Auth-gated actions should open the sign-in modal (`showAuthModal.value = true`) rather than silently failing.
+- Anonymous users can browse; sign-in (magic link) required to submit/vote. Auth-gated actions should set `showAuthModal.value = true` (which opens the settings modal) rather than silently failing.
 - Supabase free tier rate-limits magic link emails (~3-4/hour/user). The auth UI handles 429 errors with a user-facing message.
 - Neighborhood queries use `.in()` with arrays of IDs (BFS descendants), not single `.eq()`
 - Supabase RLS scoping: queries touching user-specific data (e.g. `link_votes`) must include `.eq('user_id', userId)` — the DB uses `auth.uid()` in RLS policies and view definitions, but client-side queries still need explicit user scoping
