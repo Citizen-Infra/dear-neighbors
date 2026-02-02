@@ -4,6 +4,7 @@ import { activeNeighborhoodId } from '../store/neighborhoods';
 import { topics } from '../store/topics';
 import { t } from '../lib/i18n';
 import { detectLanguage } from '../lib/detect-language';
+import { supabase } from '../lib/supabase';
 import '../styles/submit-form.css';
 import '../styles/language.css';
 
@@ -26,31 +27,20 @@ export function SubmitLinkForm({ onClose, onSubmitted }) {
     setFetching(true);
     const timer = setTimeout(async () => {
       try {
-        const res = await fetch(url);
-        const html = await res.text();
-        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const { data, error } = await supabase.functions.invoke('fetch-url-metadata', {
+          body: { url },
+        });
+        if (error) throw error;
 
-        let fetchedTitle = '';
-        let fetchedDesc = '';
+        const fetchedTitle = data?.title || '';
+        const fetchedDesc = data?.description || '';
 
-        if (!titleTouched.current) {
-          const ogTitle = doc.querySelector('meta[property="og:title"]')?.content;
-          const pageTitle = doc.querySelector('title')?.textContent;
-          const found = ogTitle || pageTitle;
-          if (found) {
-            fetchedTitle = found.trim();
-            setTitle(fetchedTitle);
-          }
+        if (!titleTouched.current && fetchedTitle) {
+          setTitle(fetchedTitle);
         }
 
-        if (!descTouched.current) {
-          const ogDesc = doc.querySelector('meta[property="og:description"]')?.content;
-          const metaDesc = doc.querySelector('meta[name="description"]')?.content;
-          const found = ogDesc || metaDesc;
-          if (found) {
-            fetchedDesc = found.trim();
-            setDescription(fetchedDesc);
-          }
+        if (!descTouched.current && fetchedDesc) {
+          setDescription(fetchedDesc);
         }
 
         if (!languageTouched.current) {
@@ -58,7 +48,7 @@ export function SubmitLinkForm({ onClose, onSubmitted }) {
           setLanguage(detected);
         }
       } catch {
-        // silent — CORS, offline, etc.
+        // silent — edge function unreachable, etc.
       } finally {
         setFetching(false);
       }

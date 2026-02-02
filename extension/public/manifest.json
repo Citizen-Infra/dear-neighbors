@@ -4,7 +4,11 @@
   "version": "0.1.7",
   "description": "A neighborhood dashboard with community-curated news and local participation opportunities.",
   "permissions": ["tabs", "storage"],
-  "host_permissions": ["<all_urls>"],
+  "host_permissions": [
+    "https://eeidclmhfkndimghdyuq.supabase.co/*",
+    "https://geocoding-api.open-meteo.com/*",
+    "https://air-quality-api.open-meteo.com/*"
+  ],
   "background": {
     "service_worker": "background.js"
   },

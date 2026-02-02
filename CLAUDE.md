@@ -98,7 +98,7 @@ Supabase Postgres with RLS. Schema in `api/migrations/`:
 
 - `base: ''` in vite.config.js — Chrome extensions need relative paths
 - Supabase env vars `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` must be set at build time — Vite inlines them. Locally via `.env.local`, in CI via GitHub Actions secrets. Without them the extension shows a white page (`supabaseUrl is required`)
-- `host_permissions: ["<all_urls>"]` in manifest.json — required for SubmitLinkForm's cross-origin URL metadata fetch
+- `host_permissions` in manifest.json — scoped to Supabase project URL (covers DB + edge functions) and Open-Meteo APIs (AQI/UV badges). URL metadata fetching is done server-side via the `fetch-url-metadata` edge function
 - Anonymous users can browse; sign-in (magic link) required to submit/vote. Auth-gated actions should set `showAuthModal.value = true` (which opens the settings modal) rather than silently failing.
 - Supabase free tier rate-limits magic link emails (~3-4/hour/user). The auth UI handles 429 errors with a user-facing message.
 - Neighborhood queries use `.in()` with arrays of IDs (BFS descendants), not single `.eq()`
