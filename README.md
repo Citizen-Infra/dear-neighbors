@@ -39,7 +39,54 @@ See [CLAUDE.md](./CLAUDE.md) for detailed architecture notes.
 
 ## Coverage
 
-111 countries with capital cities seeded. Major cities added for US, UK, EU, India, Japan, South Korea, Australia, New Zealand, South Africa, Brazil, Argentina, Chile, and Mexico. Neighborhoods seeded for Novi Sad and Krasnodar — more added as communities grow.
+111 countries with capital cities seeded. Major cities added for US, UK, EU, India, Japan, South Korea, Australia, New Zealand, South Africa, Brazil, Argentina, Chile, and Mexico. Neighborhoods seeded for Novi Sad, Belgrade, London, Auckland, Wellington, Toronto, New York, Los Angeles, and Houston — more added as communities grow.
+
+## Changelog
+
+### [Unreleased]
+- Language support: UI i18n (English/Serbian), content language filter, auto-detect from browser locale
+- Onboarding modal for new users to pick city and language on first visit
+- Live AQI and UV index badges in the top bar
+- Neighborhoods for Belgrade, London, Auckland, Wellington, Toronto, New York, Los Angeles, and Houston (10 each)
+- Toronto added as a city under Canada
+- New tab page title changed to "New Tab"
+
+### [0.1.5] - 2026-02-01
+- Share/vote buttons now open sign-in modal instead of silently doing nothing
+- Show "Too many attempts" error when Supabase email rate limit is hit
+- Add "check your spam folder" hint after magic link is sent
+
+### [0.1.4] - 2026-02-01
+- Replace DMG packaging with single ZIP for all platforms
+- Single CI job instead of two parallel jobs (fixes release race condition)
+- CHANGELOG.md, Dependabot for weekly npm security updates, CI badge in README
+- Sync package.json version with manifest.json
+
+### [0.1.3] - 2026-02-01
+- Downvote arrow to remove your own votes
+- "Top" sort tab ordered by vote count, with Week/Year/All time range picker
+
+### [0.1.2] - 2026-02-01
+- Auto-fetch page title and description when pasting a URL in the submit form
+- Topic chip pill styles in the submit form
+- `user_voted` flag in links view
+- Vote toggle now scoped to current user
+
+### [0.1.1] - 2026-02-01
+- Link deletion for submitters and admins
+- Pin-the-extension instructions in README
+- Link submission now defaults `submitted_by` to current user
+- Renamed neighborhood type from `mesna_zajednica` to `neighborhood`
+
+### [0.1.0] - 2026-01-31
+- Neighborhood dashboard replacing Chrome new tab page
+- Hierarchical location selection (country / city / neighborhood)
+- Community links feed with hot-ranking and voting
+- Participation opportunities panel (live/upcoming/completed sessions)
+- Browser popup for quick link sharing from any page
+- Magic link authentication via Supabase
+- Light/dark/system theme support
+- 111 countries, 340+ cities seeded
 
 ## License
 

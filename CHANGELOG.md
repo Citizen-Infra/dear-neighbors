@@ -1,5 +1,17 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+- Language support: UI i18n (English/Serbian), content language filter, auto-detect from browser locale
+- Onboarding modal for new users to pick city and language on first visit
+- Live AQI and UV index badges in the top bar
+- Neighborhoods for Belgrade, London, Auckland, Wellington, Toronto, New York, Los Angeles, and Houston (10 each, 90 total)
+- Toronto added as a city under Canada
+
+### Changed
+- New tab page title changed to "New Tab"
+
 ## [0.1.5] - 2026-02-01
 
 ### Fixed
@@ -42,7 +54,6 @@
 
 ### Added
 - Link deletion for submitters and admins
-- Krasnodar with 11 neighborhoods under Russia
 - Pin-the-extension instructions in README and install guides
 
 ### Fixed
