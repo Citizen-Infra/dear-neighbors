@@ -4,6 +4,10 @@
 
 A Chrome extension that turns your new tab into a neighborhood dashboard. Stay informed about what's happening locally without doomscrolling social media.
 
+<a href="https://chromewebstore.google.com/detail/dear-neighbors/mofcajnlfddkgiibgodmdhghfiakgdab">
+  <img src="https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/iNEddTyWiMfLSwFD6qGq.png" alt="Available in the Chrome Web Store" height="58">
+</a>
+
 ## What you get
 
 **Community Links** — News, events, and resources shared by your neighbors. Vote on what matters, submit what you find. Sorted by what's hot or newest.
@@ -16,12 +20,18 @@ A Chrome extension that turns your new tab into a neighborhood dashboard. Stay i
 
 ## Install
 
+**[Install from Chrome Web Store](https://chromewebstore.google.com/detail/dear-neighbors/mofcajnlfddkgiibgodmdhghfiakgdab)** — recommended, auto-updates
+
+<details>
+<summary>Manual install (for development)</summary>
+
 1. Download the latest `.zip` from [Releases](https://github.com/Citizen-Infra/dear-neighbors/releases)
 2. Extract the folder
 3. Open Chrome and go to `chrome://extensions`
 4. Enable "Developer mode" (toggle in top-right)
 5. Click "Load unpacked" and select the `extension` folder inside
 6. Pin the extension (puzzle icon → pin Dear Neighbors) for quick sharing
+</details>
 
 ## Getting started
 
