@@ -77,4 +77,6 @@ Click the gear icon to:
 
 Part of [Citizen Infrastructure](https://github.com/Citizen-Infra) — tools for community participation.
 
+See also: [My Community](https://github.com/Citizen-Infra/my-community) (community dashboard with Bluesky integration)
+
 [AGPL-3.0 License](LICENSE)
