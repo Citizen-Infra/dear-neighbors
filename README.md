@@ -4,9 +4,7 @@
 
 A Chrome extension that turns your new tab into a neighborhood dashboard. Stay informed about what's happening locally without doomscrolling social media.
 
-<a href="https://chromewebstore.google.com/detail/dear-neighbors/mofcajnlfddkgiibgodmdhghfiakgdab">
-  <img src="https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/iNEddTyWiMfLSwFD6qGq.png" alt="Available in the Chrome Web Store" height="58">
-</a>
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/mofcajnlfddkgiibgodmdhghfiakgdab?label=Chrome%20Web%20Store)](https://chromewebstore.google.com/detail/dear-neighbors/mofcajnlfddkgiibgodmdhghfiakgdab)
 
 ## What you get
 
