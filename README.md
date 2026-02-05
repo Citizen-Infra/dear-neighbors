@@ -20,6 +20,8 @@ A Chrome extension that turns your new tab into a neighborhood dashboard. Stay i
 
 **[Install from Chrome Web Store](https://chromewebstore.google.com/detail/dear-neighbors/mofcajnlfddkgiibgodmdhghfiakgdab)** — recommended, auto-updates
 
+Works in Chrome, Brave, and Edge. Arc browser users may need to disable shields for sign-in to work.
+
 <details>
 <summary>Manual install (for development)</summary>
 
