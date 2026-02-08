@@ -55,6 +55,12 @@ function SessionGroup({ title, sessions, status }) {
   );
 }
 
+const SOURCE_LABELS = {
+  luma: 'Luma',
+  telegram: 'Telegram',
+  session: 'Session',
+};
+
 function SessionCard({ session, status }) {
   const timeStr = session.starts_at
     ? new Date(session.starts_at).toLocaleDateString('en-US', {
@@ -65,10 +71,16 @@ function SessionCard({ session, status }) {
       })
     : '';
 
+  const href = session.source === 'session'
+    ? `https://harmonica.chat/session/${session.harmonica_session_id}`
+    : session.url;
+
+  const sourceLabel = SOURCE_LABELS[session.source] || session.source;
+
   return (
     <a
       class={`session-card status-${status}`}
-      href={`https://harmonica.chat/session/${session.harmonica_session_id}`}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -76,11 +88,17 @@ function SessionCard({ session, status }) {
         <span class={`session-status-badge status-${status}`}>
           {status === 'active' ? t('sessions.live') : status === 'upcoming' ? t('sessions.upcoming') : t('sessions.done')}
         </span>
+        {session.source && session.source !== 'session' && (
+          <span class={`session-source-badge source-${session.source}`}>{sourceLabel}</span>
+        )}
         {timeStr && <span class="session-time">{timeStr}</span>}
       </div>
       <h4 class="session-title">{session.title}</h4>
       {session.description && (
         <p class="session-description">{session.description}</p>
+      )}
+      {session.location && (
+        <p class="session-location">{session.location}</p>
       )}
       {session.topic_names?.length > 0 && (
         <div class="session-tags">
