@@ -80,7 +80,7 @@ Signals-based stores in `src/store/`:
 - `neighborhoods.js` — **hierarchical location**: country → city → neighborhood → block. Three persisted signals (`dn_country`, `dn_city`, `dn_neighborhood`). `filterNeighborhoodIds` does BFS to collect all descendant IDs for querying. Cascading setters reset children when parent changes. Existing-user migration walks parent chain to infer country/city from a saved neighborhood.
 - `topics.js` — interest categories, multi-select filter persisted to localStorage
 - `links.js` — community links with pagination, voting, hot-ranking. Queries use `.in('neighborhood_id', ids)` for multi-neighborhood filtering.
-- `sessions.js` — participation opportunities grouped by status (active/upcoming/completed). Same `.in()` pattern.
+- `sessions.js` — participation opportunities grouped by status (active/upcoming/completed). Fetches from scenius-digest `/api/events?city={slug}` + Supabase `sessions_with_topics` (neighborhood-filtered). Deduplicates by URL.
 - `auth.js` — Supabase auth state (magic link sign-in), `isAdmin` signal checked against `admins` table. `showAuthModal` signal is watched by TopBar; when set to true (e.g. by vote/share buttons), it opens the SettingsModal which contains the inline auth form.
 - `environment.js` — AQI and UV index from Open-Meteo APIs, displayed as badges in TopBar
 - `language.js` — `contentLanguageFilter` signal, filters link content by interface language
@@ -110,7 +110,7 @@ Supabase Postgres with RLS. Schema in `api/migrations/`:
 
 - `base: ''` in vite.config.js — Chrome extensions need relative paths
 - Supabase env vars `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` must be set at build time — Vite inlines them. Locally via `.env.local`, in CI via GitHub Actions secrets. Without them the extension shows a white page (`supabaseUrl is required`)
-- `host_permissions` in manifest.json — scoped to Supabase project URL (covers DB + edge functions) and Open-Meteo APIs (AQI/UV badges). URL metadata fetching is done server-side via the `fetch-url-metadata` edge function
+- `host_permissions` in manifest.json — scoped to Supabase project URL (covers DB + edge functions), Open-Meteo APIs (AQI/UV badges), and scenius-digest API (events). URL metadata fetching is done server-side via the `fetch-url-metadata` edge function
 - Anonymous users can browse; sign-in (magic link) required to submit/vote. Auth-gated actions should set `showAuthModal.value = true` (which opens the settings modal) rather than silently failing.
 - Supabase free tier rate-limits magic link emails (~3-4/hour/user). The auth UI handles 429 errors with a user-facing message.
 - Neighborhood queries use `.in()` with arrays of IDs (BFS descendants), not single `.eq()`
@@ -121,5 +121,6 @@ Supabase Postgres with RLS. Schema in `api/migrations/`:
 ## Related Projects
 
 - **NSRT** (`../nsrt/`) — parent project, Novi Sad community tools
+- **Scenius Digest** (`../scenius-digest/`) — events data source (`/api/events?city=`)
 - **Harmonica** (`../harmonica-web-app/`) — deliberation sessions source
 - **Tab Hoarder** (`../tab-hoarder/`) — sibling Chrome extension, pattern reference
