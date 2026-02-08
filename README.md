@@ -42,6 +42,11 @@ Click the gear icon to:
 
 ## Changelog
 
+### 0.1.9 — February 2026
+- Participation feed now aggregates events from city-wide communities (Telegram event links, external APIs)
+- Source badges and location display on event cards
+- Refined card layout with better visual hierarchy
+
 ### 0.1.8 — February 2026
 - Improved security and permissions
 - About footer in Settings
