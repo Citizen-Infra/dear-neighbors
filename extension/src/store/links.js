@@ -21,7 +21,7 @@ export async function loadLinks({ neighborhoodIds = [], topicIds = [], sort = 'h
   }
 
   if (topicIds.length > 0) {
-    query = query.contains('topic_ids', topicIds);
+    query = query.overlaps('topic_ids', topicIds);
   }
 
   if (language) {
