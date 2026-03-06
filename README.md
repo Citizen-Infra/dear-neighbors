@@ -23,14 +23,26 @@ A Chrome extension that turns your new tab into a neighborhood dashboard. Stay i
 Works in Chrome, Brave, and Edge. Arc browser users may need to disable shields for sign-in to work.
 
 <details>
-<summary>Manual install (for development)</summary>
+<summary>Manual install (from release)</summary>
 
-1. Download the latest `.zip` from [Releases](https://github.com/Citizen-Infra/dear-neighbors/releases)
+1. Go to the [latest release](https://github.com/Citizen-Infra/dear-neighbors/releases/latest) and download `Dear-Neighbors-v*.zip` (not "Source code" — that won't work)
 2. Extract the folder
-3. Open Chrome and go to `chrome://extensions`
-4. Enable "Developer mode" (toggle in top-right)
-5. Click "Load unpacked" and select the `extension` folder inside
-6. Pin the extension (puzzle icon → pin Dear Neighbors) for quick sharing
+3. Open Chrome → `chrome://extensions` → enable "Developer mode"
+4. Click "Load unpacked" and select the `extension` folder inside the extracted folder
+5. Pin the extension (puzzle icon → pin Dear Neighbors) for quick sharing
+</details>
+
+<details>
+<summary>Build from source</summary>
+
+```bash
+git clone https://github.com/Citizen-Infra/dear-neighbors.git
+cd dear-neighbors/extension
+npm install
+npm run build
+```
+
+Then load `extension/dist/` as an unpacked extension in `chrome://extensions` (Developer mode).
 </details>
 
 ## Getting started
