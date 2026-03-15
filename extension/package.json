@@ -15,7 +15,7 @@
     "@supabase/supabase-js": "^2.49.1"
   },
   "devDependencies": {
-    "@preact/preset-vite": "^2.9.3",
+    "@preact/preset-vite": "^2.10.4",
     "vite": "^6.0.7"
   }
 }
