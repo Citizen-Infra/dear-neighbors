@@ -1,12 +1,18 @@
 // Auth redirect interceptor
-// Chrome blocks redirects to chrome-extension:// URLs from external sites.
-// This service worker watches for Supabase auth callbacks and navigates
-// the tab to the extension page with the auth tokens intact.
+// Chrome blocks redirects to chrome-extension:// URLs from external sites, so
+// this service worker watches for Supabase auth callbacks and forwards the
+// session to the extension page.
+//
+// The auth payload is stashed in chrome.storage and the tab is navigated to a
+// CLEAN extension URL (no token in the URL). This keeps tokens out of the page
+// URL/history and avoids content/privacy blockers that match token params in
+// the URL (which surfaced as ERR_BLOCKED_BY_CLIENT on the redirect).
 
 const SUPABASE_HOST = 'eeidclmhfkndimghdyuq.supabase.co';
 const EXTENSION_PAGE = 'src/newtab.html';
+const AUTH_STASH_KEY = 'dn_auth_redirect';
 
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
   if (!changeInfo.url) return;
 
   let url;
@@ -18,24 +24,19 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
   if (url.hostname !== SUPABASE_HOST) return;
 
-  // Implicit flow: #access_token=...
-  if (url.hash && url.hash.includes('access_token=')) {
-    const extensionUrl = chrome.runtime.getURL(EXTENSION_PAGE) + url.hash;
-    chrome.tabs.update(tabId, { url: extensionUrl });
-    return;
+  let payload = null;
+  if (url.hash && (url.hash.includes('access_token=') || url.hash.includes('error='))) {
+    // Implicit flow (#access_token=...) or error (#error=...)
+    payload = { kind: 'hash', value: url.hash.replace(/^#/, '') };
+  } else if (url.searchParams.has('code')) {
+    // PKCE flow (?code=...)
+    payload = { kind: 'query', value: url.searchParams.toString() };
   }
 
-  // Error redirect: #error=...
-  if (url.hash && url.hash.includes('error=')) {
-    const extensionUrl = chrome.runtime.getURL(EXTENSION_PAGE) + url.hash;
-    chrome.tabs.update(tabId, { url: extensionUrl });
-    return;
-  }
+  if (!payload) return;
 
-  // PKCE flow: ?code=...
-  if (url.searchParams.has('code')) {
-    const extensionUrl = chrome.runtime.getURL(EXTENSION_PAGE) + '?' + url.searchParams.toString();
-    chrome.tabs.update(tabId, { url: extensionUrl });
-    return;
-  }
+  // Stash the payload out-of-band, then navigate to a clean extension URL.
+  chrome.storage.local.set({ [AUTH_STASH_KEY]: payload }, () => {
+    chrome.tabs.update(tabId, { url: chrome.runtime.getURL(EXTENSION_PAGE) });
+  });
 });
