@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.0] - 2026-06-20
+
+### Fixed
+- Magic-link sign-in no longer carries the auth token in the URL — fixes sign-in being blocked by content/privacy blockers (ERR_BLOCKED_BY_CLIENT), and keeps tokens out of the URL/history
+
+### Changed
+- Update preact to 10.29.2 and @supabase/supabase-js to 2.99.1
+
+### Internal
+- Add CI workflow that builds the extension on every pull request
+
 ## [0.1.8] - 2026-02-02
 
 ### Changed
